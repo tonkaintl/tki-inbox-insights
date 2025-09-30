@@ -39,3 +39,37 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Azure Functions
+python-functions/.venv/
+python-functions/local.settings.json
+python-functions/.azure/
+python-functions/.funcignore
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Azure deployment
+.azure/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Testing
+/coverage
+.nyc_output
+.coverage

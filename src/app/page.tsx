@@ -1,95 +1,127 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { loginRequest } from "@/lib/authConfig";
+import { useMsal } from "@azure/msal-react";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Typography,
+} from "@mui/joy";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { instance, accounts } = useMsal();
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  const handleLogin = async () => {
+    try {
+      await instance.loginPopup(loginRequest);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
+  const handleLogout = () => {
+    instance.logoutPopup();
+  };
+
+  const isAuthenticated = accounts.length > 0;
+
+  return (
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box sx={{ textAlign: "center", mb: 4 }}>
+        <Typography level="h1" sx={{ mb: 2 }}>
+          TKI Inbox Insights
+        </Typography>
+        <Typography level="body-lg" sx={{ mb: 4, color: "text.secondary" }}>
+          Smart newsletter processing for your Office 365 account
+        </Typography>
+
+        {!isAuthenticated ? (
+          <Card sx={{ maxWidth: 400, mx: "auto" }}>
+            <CardContent>
+              <Typography level="h3" sx={{ mb: 2 }}>
+                Get Started
+              </Typography>
+              <Typography sx={{ mb: 3 }}>
+                Connect your Office 365 account to start analyzing your
+                newsletters
+              </Typography>
+              <Button onClick={handleLogin} size="lg" fullWidth>
+                Sign in with Microsoft
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <Box>
+            <Typography level="h3" sx={{ mb: 2 }}>
+              Welcome, {accounts[0].name}!
+            </Typography>
+            <Box
+              sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 4 }}
+            >
+              <Button variant="outlined">Browse Email Folders</Button>
+              <Button variant="outlined">View Analytics</Button>
+              <Button variant="outlined" onClick={handleLogout}>
+                Sign Out
+              </Button>
+            </Box>
+
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: 3,
+              }}
+            >
+              <Card>
+                <CardContent>
+                  <Typography level="h4" sx={{ mb: 1 }}>
+                    📧 Email Analysis
+                  </Typography>
+                  <Typography>
+                    Analyze newsletter content and extract valuable insights
+                  </Typography>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent>
+                  <Typography level="h4" sx={{ mb: 1 }}>
+                    🔍 Content Deduplication
+                  </Typography>
+                  <Typography>
+                    Identify and organize repeated content across newsletters
+                  </Typography>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent>
+                  <Typography level="h4" sx={{ mb: 1 }}>
+                    🚀 Tutorial Detection
+                  </Typography>
+                  <Typography>
+                    Automatically find and categorize development tutorials
+                  </Typography>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent>
+                  <Typography level="h4" sx={{ mb: 1 }}>
+                    🏢 Vendor Intelligence
+                  </Typography>
+                  <Typography>
+                    Track service providers and business opportunities
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+          </Box>
+        )}
+      </Box>
+    </Container>
   );
 }
