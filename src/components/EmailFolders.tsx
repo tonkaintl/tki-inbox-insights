@@ -129,6 +129,35 @@ export default function EmailFolders({ onFolderSelect }: EmailFoldersProps) {
     setMessages([]);
   };
 
+  const handleSaveEmail = async (message: Message) => {
+    try {
+      const emailData = {
+        ...message,
+        folderName: currentFolder?.displayName,
+        folderId: currentFolder?.id,
+      };
+
+      const response = await fetch("/api/save-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(emailData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`Email "${message.subject}" saved to MongoDB successfully!`);
+      } else {
+        alert(`Failed to save email: ${result.message}`);
+      }
+    } catch (error) {
+      console.error("Error saving email:", error);
+      alert("Error saving email to MongoDB");
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
@@ -256,6 +285,14 @@ export default function EmailFolders({ onFolderSelect }: EmailFoldersProps) {
                             }
                           >
                             Open in Outlook
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outlined"
+                            color="success"
+                            onClick={() => handleSaveEmail(message)}
+                          >
+                            Save to MongoDB
                           </Button>
                         </Box>
                       </CardContent>
