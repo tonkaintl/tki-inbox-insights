@@ -33,7 +33,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: |
+            .next/standalone/
+            .next/static/
+            public/
 
   deploy:
     runs-on: ubuntu-latest
@@ -55,11 +58,18 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4528C3AED8BD4205BE38C6D020998C45 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FB91EA082EDF486AB5D6A9BA3CA8F67D }}
 
+      - name: Copy standalone app structure
+        run: |
+          mkdir deploy
+          cp -r .next/standalone/* deploy/
+          cp -r .next/static deploy/.next/static
+          cp -r public deploy/public
+          
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
           app-name: 'tki-inbox-insights'
           slot-name: 'Production'
-          package: .
+          package: deploy
           
