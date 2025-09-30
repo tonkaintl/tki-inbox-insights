@@ -171,7 +171,7 @@ export default function EmailFolders({ onFolderSelect }: EmailFoldersProps) {
 
   const handleParseNewsletter = async (message: Message) => {
     try {
-      const response = await fetch("/api/parse-newsletter", {
+      const response = await fetch("/api/parse-from-database", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
