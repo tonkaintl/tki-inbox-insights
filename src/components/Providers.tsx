@@ -8,6 +8,14 @@ import { CssVarsProvider } from "@mui/joy/styles";
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
+// Initialize MSAL and handle redirects
+msalInstance.initialize().then(() => {
+  // Handle redirect promise on page load
+  msalInstance.handleRedirectPromise().catch((error) => {
+    console.error("Redirect promise error:", error);
+  });
+});
+
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <MsalProvider instance={msalInstance}>
