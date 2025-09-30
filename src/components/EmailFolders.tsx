@@ -131,8 +131,17 @@ export default function EmailFolders({ onFolderSelect }: EmailFoldersProps) {
 
   const handleSaveEmail = async (message: Message) => {
     try {
+      // First get the full email body from Microsoft Graph
+      if (!graphService) {
+        alert("Graph service not available");
+        return;
+      }
+
+      const fullMessage = await graphService.getFullMessage(message.id);
+
       const emailData = {
         ...message,
+        ...fullMessage,
         folderName: currentFolder?.displayName,
         folderId: currentFolder?.id,
       };
@@ -148,13 +157,44 @@ export default function EmailFolders({ onFolderSelect }: EmailFoldersProps) {
       const result = await response.json();
 
       if (result.success) {
-        alert(`Email "${message.subject}" saved to MongoDB successfully!`);
+        alert(
+          `Email "${message.subject}" saved to MongoDB with full HTML body!`
+        );
       } else {
         alert(`Failed to save email: ${result.message}`);
       }
     } catch (error) {
       console.error("Error saving email:", error);
       alert("Error saving email to MongoDB");
+    }
+  };
+
+  const handleParseNewsletter = async (message: Message) => {
+    try {
+      const response = await fetch("/api/parse-newsletter", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ emailId: message.id }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(
+          `Newsletter parsed successfully!\n` +
+            `Parser: ${result.parserId}\n` +
+            `Sections found: ${result.sectionsFound}\n` +
+            `Links found: ${result.linksFound}`
+        );
+        console.log("Parsed newsletter data:", result.parsedNewsletter);
+      } else {
+        alert(`Failed to parse newsletter: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Error parsing newsletter:", error);
+      alert("Error parsing newsletter");
     }
   };
 
@@ -293,6 +333,14 @@ export default function EmailFolders({ onFolderSelect }: EmailFoldersProps) {
                             onClick={() => handleSaveEmail(message)}
                           >
                             Save to MongoDB
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outlined"
+                            color="warning"
+                            onClick={() => handleParseNewsletter(message)}
+                          >
+                            Parse Newsletter
                           </Button>
                         </Box>
                       </CardContent>

@@ -95,6 +95,28 @@ export class GraphService {
     return response.value;
   }
 
+  async getFullMessage(
+    messageId: string
+  ): Promise<Message & { body: { contentType: string; content: string } }> {
+    // For single messages, Graph API returns the object directly, not in a value array
+    const response = await fetch(
+      `https://graph.microsoft.com/v1.0/me/messages/${messageId}?$select=id,subject,from,receivedDateTime,isRead,body,bodyPreview,webLink`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  }
+
   static async getAccessToken(
     instance: IPublicClientApplication,
     account: AccountInfo
