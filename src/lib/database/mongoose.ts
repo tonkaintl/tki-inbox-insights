@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 if (!process.env.MONGODB_URI) {
-  throw new Error('Please add your MongoDB URI to .env.local');
+  throw new Error("Please add your MongoDB URI to .env.local");
 }
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -30,11 +30,11 @@ async function connectToDatabase() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      dbName: 'tki-inbox-insights',
+      dbName: "tki-inbox-insights",
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      console.log('✅ Connected to MongoDB with Mongoose');
+      console.log("✅ Connected to MongoDB with Mongoose");
       return mongoose;
     });
   }

@@ -1,5 +1,5 @@
-import connectToDatabase from "@/lib/database/mongoose";
 import { Email, ParsedNewsletter } from "@/lib/database/models";
+import connectToDatabase from "@/lib/database/mongoose";
 import { ParserFactory } from "@/lib/parsers";
 import { NextResponse } from "next/server";
 

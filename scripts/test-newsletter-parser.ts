@@ -49,6 +49,16 @@ async function testNewsletterParsing() {
     console.log(`  ${index + 1}. ${section.title} (${section.type})`);
     console.log(`     Content: ${section.content.substring(0, 80)}...`);
   });
+
+  // Final output: Show just the first section for easier reading
+  console.log("\n" + "=".repeat(80));
+  console.log("📋 FIRST Section from ParsedNewsletterSchema:");
+  console.log("=".repeat(80));
+  if (result.sections.length > 0) {
+    console.log(JSON.stringify(result.sections[0], null, 2));
+  } else {
+    console.log("No sections found!");
+  }
 }
 
 testNewsletterParsing().catch(console.error);

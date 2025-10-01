@@ -1,10 +1,10 @@
-import connectToDatabase from "@/lib/database/mongoose";
 import { Email, ParsedNewsletter } from "@/lib/database/models";
+import connectToDatabase from "@/lib/database/mongoose";
 
 async function testMongooseConnection() {
   try {
     console.log("🔌 Testing Mongoose connection...");
-    
+
     // Connect to database
     await connectToDatabase();
     console.log("✅ Connected to database");
@@ -13,14 +13,17 @@ async function testMongooseConnection() {
     const emailCount = await Email.countDocuments();
     console.log(`📧 Found ${emailCount} emails in database`);
 
-    // Test ParsedNewsletter model  
+    // Test ParsedNewsletter model
     const parsedCount = await ParsedNewsletter.countDocuments();
     console.log(`📰 Found ${parsedCount} parsed newsletters in database`);
 
     // Show some validation info
     console.log("\n📋 Schema validation info:");
     console.log("Email fields:", Object.keys(Email.schema.paths));
-    console.log("ParsedNewsletter has sections field:", "sections" in ParsedNewsletter.schema.paths);
+    console.log(
+      "ParsedNewsletter has sections field:",
+      "sections" in ParsedNewsletter.schema.paths
+    );
 
     process.exit(0);
   } catch (error) {
