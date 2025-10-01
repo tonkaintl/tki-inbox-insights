@@ -64,9 +64,7 @@ async function testNewsletterParsing() {
     return acc;
   }, {} as Record<string, number>);
 
-  const duplicates = Object.entries(urlCounts).filter(
-    ([, count]) => count > 1
-  );
+  const duplicates = Object.entries(urlCounts).filter(([, count]) => count > 1);
 
   console.log("\n� DUPLICATE CHECK:");
   console.log("=".repeat(80));
