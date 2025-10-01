@@ -1,6 +1,7 @@
 "use client";
 
 import EmailFolders from "@/components/email/EmailFolders";
+import ProcessFolderButton from "@/components/ProcessFolderButton";
 import { loginRequest } from "@/lib/authConfig";
 import { useMsal } from "@azure/msal-react";
 import {
@@ -11,9 +12,14 @@ import {
   Container,
   Typography,
 } from "@mui/joy";
+import { useState } from "react";
 
 export default function Home() {
   const { instance, accounts } = useMsal();
+  const [selectedFolder, setSelectedFolder] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   const handleLogin = async () => {
     try {
@@ -67,11 +73,27 @@ export default function Home() {
               </Button>
             </Box>
 
-            <EmailFolders
-              onFolderSelect={(folderId: string, folderName: string) => {
-                console.log(`Selected folder: ${folderName} (${folderId})`);
-              }}
-            />
+            {selectedFolder && selectedFolder.name !== "All Folders" && (
+              <ProcessFolderButton
+                folderId={selectedFolder.id}
+                folderName={selectedFolder.name}
+              />
+            )}
+
+            <Box sx={{ mt: 4 }}>
+              <EmailFolders
+                onFolderSelect={(folderId: string, folderName: string) => {
+                  console.log(`Selected folder: ${folderName} (${folderId})`);
+
+                  // Reset selected folder when going back to "All Folders"
+                  if (folderName === "All Folders" || folderId === "") {
+                    setSelectedFolder(null);
+                  } else {
+                    setSelectedFolder({ id: folderId, name: folderName });
+                  }
+                }}
+              />
+            </Box>
           </Box>
         )}
       </Box>

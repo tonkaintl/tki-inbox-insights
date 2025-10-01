@@ -127,6 +127,11 @@ export default function EmailFolders({ onFolderSelect }: EmailFoldersProps) {
   const handleBackToFolders = () => {
     setCurrentFolder(null);
     setMessages([]);
+
+    // Notify parent component to reset selected folder
+    if (onFolderSelect) {
+      onFolderSelect("", "All Folders");
+    }
   };
 
   const handleSaveEmail = async (message: Message) => {

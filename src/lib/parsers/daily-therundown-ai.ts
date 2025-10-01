@@ -30,18 +30,12 @@ export class DailyTheRundownAiParser implements NewsletterParser {
     const $ = cheerio.load(html);
     const sections: NewsletterSection[] = [];
     const links: ExtractedLink[] = [];
-    let sectionOrder = 0;
 
-    // First, try to extract basic document structure
-    this.parseTopNav($, sections, links, sectionOrder++);
+    // FAST: Just extract all links and categorize them
+    this.extractAllLinks($, links);
 
-    // Then try specific newsletter sections if they exist
-    this.parseHeader($, sections, links, sectionOrder++);
-    this.parseIntro($, sections, links, sectionOrder++);
-    this.parseLatestDevelopments($, sections, links, sectionOrder++);
-    this.parseQuickHits($, sections, links, sectionOrder++);
-    this.parseCommunity($, sections, links, sectionOrder++);
-    this.parseFooter($, sections, links, sectionOrder++);
+    // FAST: Create minimal sections for organization
+    this.createMinimalSections(sections);
 
     return {
       id: `parsed-${emailMetadata.id}-${Date.now()}`,
@@ -199,89 +193,137 @@ export class DailyTheRundownAiParser implements NewsletterParser {
     links: ExtractedLink[],
     order: number
   ) {
-    // Look for "LATEST DEVELOPMENTS" section in black background table
-    const developmentsHeader = $(
-      'td[bgcolor="#000000"] span:contains("LATEST DEVELOPMENTS"), td[style*="background-color:#000000"] span:contains("LATEST DEVELOPMENTS")'
-    );
+    console.log("🔍 Looking for LATEST DEVELOPMENTS section...");
 
-    if (developmentsHeader.length > 0) {
+    // Look for "LATEST DEVELOPMENTS" text anywhere in the document
+    const developmentsText = $(':contains("LATEST DEVELOPMENTS")')
+      .filter((_, el) => {
+        const text = $(el).text();
+        return text.includes("LATEST DEVELOPMENTS") && text.trim().length < 100;
+      })
+      .first();
+
+    if (developmentsText.length > 0) {
+      console.log("✅ Found LATEST DEVELOPMENTS section");
       const articles: string[] = [];
-      console.log("Found LATEST DEVELOPMENTS header");
 
-      // Navigate from the black header table to find following content
-      const headerTableRow = developmentsHeader.closest("tr");
-      let nextRow = headerTableRow.next("tr");
+      // Get all text content and split by major sections
+      const fullText = $("body").text() || $.root().text();
 
-      // Look through the next several table rows for article content
-      let rowCount = 0;
-      while (nextRow.length > 0 && rowCount < 15) {
-        // Look for article headings (h3, h4, h6) in this row
-        const headings = nextRow.find("h3, h4, h6");
+      // Find the start of LATEST DEVELOPMENTS section
+      const latestDevsStart = fullText.indexOf("LATEST DEVELOPMENTS");
+      if (latestDevsStart === -1) return;
 
-        headings.each((_, heading) => {
-          const headingText = this.cleanText($(heading).text());
-          console.log("Found heading:", headingText.substring(0, 50));
+      // Find the end (next major section)
+      const quickHitsStart = fullText.indexOf("QUICK HITS", latestDevsStart);
+      const communityStart = fullText.indexOf("COMMUNITY", latestDevsStart);
+      const sectionEnd = Math.min(
+        quickHitsStart === -1 ? Infinity : quickHitsStart,
+        communityStart === -1 ? Infinity : communityStart
+      );
 
-          // Check if this looks like a main article heading
-          if (
-            headingText &&
-            (headingText.includes("AI & HOLLYWOOD") ||
-              headingText.includes("APPLE") ||
-              headingText.includes("AI TRAINING") ||
-              headingText.includes("actress") ||
-              headingText.includes("Siri") ||
-              headingText.includes("ChatGPT") ||
-              headingText.match(/^[A-Z][A-Z\s&]+$/) || // All caps categories
-              headingText.length > 20) // Longer descriptive titles
-          ) {
-            let articleContent = headingText + "\n\n";
+      const sectionText = fullText.substring(
+        latestDevsStart,
+        sectionEnd === Infinity ? undefined : sectionEnd
+      );
 
-            // Find the article content in the same table cell
-            const contentParent = $(heading).closest("td");
+      console.log("📝 Section text length:", sectionText.length);
 
-            // Get subsequent paragraphs
-            contentParent.find("p").each((_, p) => {
-              const pText = this.cleanText($(p).text());
-              if (
-                pText &&
-                (pText.startsWith("The Rundown:") ||
-                  pText.startsWith("The details:") ||
-                  pText.startsWith("Why it matters:") ||
-                  pText.startsWith("What it means:") ||
-                  pText.length > 50) // Include longer descriptive paragraphs
-              ) {
-                articleContent += pText + "\n\n";
-              }
-            });
+      // Parse individual articles by looking for patterns like:
+      // "OPENAI" or "ANTHROPIC" followed by "🤑" and article content
+      const articlePattern =
+        /([A-Z]{2,}(?:\s+[A-Z&]{2,})*)\s*🤑\s*([^\n]+)\s*The Rundown:\s*([^]*?)(?=(?:[A-Z]{2,}(?:\s+[A-Z&]{2,})*)\s*🤑|$)/g;
+      let match;
 
-            if (articleContent.length > headingText.length + 10) {
-              articles.push(this.cleanText(articleContent));
-              console.log("Added article:", headingText);
-            }
+      while ((match = articlePattern.exec(sectionText)) !== null) {
+        const [, category, headline, content] = match;
+
+        if (category && headline && content) {
+          const cleanCategory = category.trim();
+          const cleanHeadline = headline.trim();
+          const cleanContent = content.trim();
+
+          // Further parse the content for "The details:" and "Why it matters:"
+          const detailsMatch = cleanContent.match(
+            /The details:\s*([^]*?)(?:Why it matters:|$)/
+          );
+          const whyItMattersMatch = cleanContent.match(
+            /Why it matters:\s*([^]*?)$/
+          );
+
+          let articleText = `${cleanCategory}\n🤑 ${cleanHeadline}\n\nThe Rundown: ${cleanContent
+            .split("The details:")[0]
+            .trim()}`;
+
+          if (detailsMatch && detailsMatch[1]) {
+            articleText += `\n\nThe details: ${detailsMatch[1].trim()}`;
           }
-        });
 
-        nextRow = nextRow.next("tr");
-        rowCount++;
+          if (whyItMattersMatch && whyItMattersMatch[1]) {
+            articleText += `\n\nWhy it matters: ${whyItMattersMatch[1].trim()}`;
+          }
 
-        // Stop if we hit another section header
-        if (
-          nextRow.find(
-            'span:contains("QUICK HITS"), span:contains("COMMUNITY")'
-          ).length > 0
-        ) {
-          break;
+          articles.push(articleText);
+          console.log(
+            "✅ Parsed article:",
+            cleanCategory,
+            cleanHeadline.substring(0, 30) + "..."
+          );
+        }
+      }
+
+      // Fallback: if pattern matching fails, try to extract by looking for capital letter categories
+      if (articles.length === 0) {
+        console.log("🔄 Trying fallback extraction method...");
+        const lines = sectionText
+          .split("\n")
+          .map((line) => line.trim())
+          .filter((line) => line.length > 0);
+
+        let currentArticle = "";
+        let inArticle = false;
+
+        for (const line of lines) {
+          // Check if this is a category line (all caps, short)
+          if (line.match(/^[A-Z]{2,}(?:\s+[A-Z&]{2,})*$/) && line.length < 30) {
+            if (currentArticle) {
+              articles.push(currentArticle.trim());
+            }
+            currentArticle = line + "\n";
+            inArticle = true;
+          } else if (
+            inArticle &&
+            (line.includes("🤑") ||
+              line.includes("The Rundown:") ||
+              line.includes("The details:") ||
+              line.includes("Why it matters:"))
+          ) {
+            currentArticle += line + "\n";
+          } else if (inArticle && line.length > 20) {
+            currentArticle += line + "\n";
+          }
+        }
+
+        if (currentArticle) {
+          articles.push(currentArticle.trim());
         }
       }
 
       if (articles.length > 0) {
+        console.log(
+          `✅ Extracted ${articles.length} articles from Latest Developments`
+        );
         sections.push({
           type: "latest-developments",
           title: "Latest Developments",
           content: articles.join("\n\n---\n\n"),
           order,
         });
+      } else {
+        console.log("❌ No articles found in Latest Developments section");
       }
+    } else {
+      console.log("❌ LATEST DEVELOPMENTS section not found");
     }
   }
 
@@ -511,5 +553,62 @@ export class DailyTheRundownAiParser implements NewsletterParser {
 
     // Default to news
     return LinkCategory.NEWS;
+  }
+
+  private extractAllLinks($: cheerio.CheerioAPI, links: ExtractedLink[]) {
+    $("a").each((_, el) => {
+      const link = $(el);
+      const href = link.attr("href");
+      const text = link.text().trim();
+
+      if (href && text && href.startsWith("http")) {
+        links.push({
+          url: href,
+          text,
+          section: this.guessSection(text, href),
+          category: this.categorizeLink(href, text),
+        });
+      }
+    });
+  }
+
+  private createMinimalSections(sections: NewsletterSection[]) {
+    sections.push(
+      {
+        type: "latest-developments",
+        title: "Latest Developments",
+        content: "News and developments",
+        order: 0,
+      },
+      {
+        type: "quick-hits",
+        title: "Quick Hits",
+        content: "Brief updates",
+        order: 1,
+      },
+      {
+        type: "community",
+        title: "Community",
+        content: "Community content",
+        order: 2,
+      }
+    );
+  }
+
+  private guessSection(text: string, url: string): string {
+    const lowerText = text.toLowerCase();
+    if (
+      lowerText.includes("job") ||
+      lowerText.includes("hire") ||
+      lowerText.includes("career")
+    )
+      return "community";
+    if (
+      lowerText.includes("quick") ||
+      url.includes("twitter") ||
+      url.includes("linkedin")
+    )
+      return "quick-hits";
+    return "latest-developments";
   }
 }
