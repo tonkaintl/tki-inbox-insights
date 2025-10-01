@@ -1,4 +1,5 @@
-import { getDatabase } from "@/lib/database/mongodb";
+import connectToDatabase from "@/lib/database/mongoose";
+import { Email } from "@/lib/database/models";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -6,19 +7,10 @@ export async function POST(request: Request) {
     const emailData = await request.json();
 
     // Connect to MongoDB
-    const db = await getDatabase();
-    const collection = db.collection("emails");
-
-    // Add metadata to the email
-    const emailDocument = {
-      ...emailData,
-      savedAt: new Date(),
-      source: "microsoft-graph",
-      processed: false, // Flag for later newsletter analysis
-    };
+    await connectToDatabase();
 
     // Check if email already exists (avoid duplicates)
-    const existingEmail = await collection.findOne({ id: emailData.id });
+    const existingEmail = await Email.findOne({ id: emailData.id });
 
     if (existingEmail) {
       return NextResponse.json({
@@ -28,13 +20,16 @@ export async function POST(request: Request) {
       });
     }
 
-    // Insert the email
-    const result = await collection.insertOne(emailDocument);
+    // Create the email document with Mongoose (timestamps added automatically)
+    const result = await Email.create({
+      ...emailData,
+      // processed field removed - not in schema, Mongoose handles timestamps
+    });
 
     return NextResponse.json({
       success: true,
       message: "Email saved to MongoDB successfully!",
-      insertedId: result.insertedId,
+      insertedId: result._id,
       emailId: emailData.id,
     });
   } catch (error) {

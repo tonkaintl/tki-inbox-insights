@@ -1,4 +1,5 @@
-import { getDatabase } from "@/lib/database/mongodb";
+import connectToDatabase from "@/lib/database/mongoose";
+import { Email, ParsedNewsletter } from "@/lib/database/models";
 import { ParserFactory } from "@/lib/parsers";
 import { NextResponse } from "next/server";
 
@@ -13,10 +14,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // Get the email from MongoDB
-    const db = await getDatabase();
-    const emailsCollection = db.collection("emails");
-    const email = await emailsCollection.findOne({ id: emailId });
+    // Connect to MongoDB and get the email
+    await connectToDatabase();
+    const email = await Email.findOne({ id: emailId });
 
     if (!email) {
       return NextResponse.json(
@@ -70,11 +70,8 @@ export async function POST(request: Request) {
       date: email.receivedDateTime || "",
     });
 
-    // Save parsed newsletter to MongoDB
-    const parsedCollection = db.collection("parsed-newsletters");
-
     // Check if already parsed
-    const existingParsed = await parsedCollection.findOne({ emailId });
+    const existingParsed = await ParsedNewsletter.findOne({ emailId });
     if (existingParsed) {
       return NextResponse.json({
         success: false,
@@ -83,12 +80,13 @@ export async function POST(request: Request) {
       });
     }
 
-    const result = await parsedCollection.insertOne(parsedNewsletter);
+    // Save parsed newsletter to MongoDB with Mongoose
+    const result = await ParsedNewsletter.create(parsedNewsletter);
 
     return NextResponse.json({
       success: true,
       message: `Newsletter parsed using ${parser.name} parser`,
-      insertedId: result.insertedId,
+      insertedId: result._id,
       parserId: parser.name,
       sectionsFound: parsedNewsletter.sections.length,
       linksFound: parsedNewsletter.links.length,
