@@ -1,5 +1,7 @@
 "use client";
 
+import EmailFolders from "@/components/email/EmailFolders";
+import ProcessFolderButton from "@/components/ProcessFolderButton";
 import { loginRequest } from "@/lib/authConfig";
 import { useMsal } from "@azure/msal-react";
 import {
@@ -10,9 +12,14 @@ import {
   Container,
   Typography,
 } from "@mui/joy";
+import { useState } from "react";
 
 export default function Home() {
   const { instance, accounts } = useMsal();
+  const [selectedFolder, setSelectedFolder] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   const handleLogin = async () => {
     try {
@@ -61,63 +68,31 @@ export default function Home() {
             <Box
               sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 4 }}
             >
-              <Button variant="outlined">Browse Email Folders</Button>
-              <Button variant="outlined">View Analytics</Button>
               <Button variant="outlined" onClick={handleLogout}>
                 Sign Out
               </Button>
             </Box>
 
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-                gap: 3,
-              }}
-            >
-              <Card>
-                <CardContent>
-                  <Typography level="h4" sx={{ mb: 1 }}>
-                    📧 Email Analysis
-                  </Typography>
-                  <Typography>
-                    Analyze newsletter content and extract valuable insights
-                  </Typography>
-                </CardContent>
-              </Card>
+            {selectedFolder && selectedFolder.name !== "All Folders" && (
+              <ProcessFolderButton
+                folderId={selectedFolder.id}
+                folderName={selectedFolder.name}
+              />
+            )}
 
-              <Card>
-                <CardContent>
-                  <Typography level="h4" sx={{ mb: 1 }}>
-                    🔍 Content Deduplication
-                  </Typography>
-                  <Typography>
-                    Identify and organize repeated content across newsletters
-                  </Typography>
-                </CardContent>
-              </Card>
+            <Box sx={{ mt: 4 }}>
+              <EmailFolders
+                onFolderSelect={(folderId: string, folderName: string) => {
+                  console.log(`Selected folder: ${folderName} (${folderId})`);
 
-              <Card>
-                <CardContent>
-                  <Typography level="h4" sx={{ mb: 1 }}>
-                    🚀 Tutorial Detection
-                  </Typography>
-                  <Typography>
-                    Automatically find and categorize development tutorials
-                  </Typography>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent>
-                  <Typography level="h4" sx={{ mb: 1 }}>
-                    🏢 Vendor Intelligence
-                  </Typography>
-                  <Typography>
-                    Track service providers and business opportunities
-                  </Typography>
-                </CardContent>
-              </Card>
+                  // Reset selected folder when going back to "All Folders"
+                  if (folderName === "All Folders" || folderId === "") {
+                    setSelectedFolder(null);
+                  } else {
+                    setSelectedFolder({ id: folderId, name: folderName });
+                  }
+                }}
+              />
             </Box>
           </Box>
         )}
