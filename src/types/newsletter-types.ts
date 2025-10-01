@@ -36,9 +36,10 @@ export interface NewsletterSection {
   // Flexible section type - each parser defines its own types
   type: string; // "header", "ai-developments", "quick-hits", etc.
   title?: string;
-  content: string;
+  content: string; // Clean text content (emojis stripped)
   items?: NewsletterItem[]; // For structured lists
   order: number;
+  objectId?: string; // Groups related sections (title + body + links)
   // Allow parsers to add custom properties
   [key: string]: unknown;
 }
@@ -53,9 +54,10 @@ export interface NewsletterItem {
 
 export interface ExtractedLink {
   url: string;
-  text: string;
+  text: string; // Clean text (emojis stripped)
   section: string;
   category: LinkCategoryType;
+  objectId?: string; // Groups with related sections
 }
 
 // Base parser interface that all newsletter parsers must implement

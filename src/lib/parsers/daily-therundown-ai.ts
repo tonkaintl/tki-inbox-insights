@@ -1,4 +1,3 @@
-import * as cheerio from "cheerio";
 import {
   EmailMetadata,
   ExtractedLink,
@@ -7,7 +6,9 @@ import {
   NewsletterParser,
   NewsletterSection,
   ParsedNewsletter,
-} from "../newsletter-types";
+} from "@/types/newsletter-types";
+import * as cheerio from "cheerio";
+import { stripEmojis } from "../utils/email-utils";
 
 export class DailyTheRundownAiParser implements NewsletterParser {
   name = "daily-therundown-ai";
@@ -15,13 +16,7 @@ export class DailyTheRundownAiParser implements NewsletterParser {
 
   // Utility function to clean emojis and normalize text
   private cleanText(text: string): string {
-    // Remove emojis using Unicode ranges
-    return text
-      .replace(
-        /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu,
-        ""
-      )
-      .trim();
+    return stripEmojis(text);
   }
 
   canParse(fromAddress: string): boolean {
@@ -84,33 +79,59 @@ export class DailyTheRundownAiParser implements NewsletterParser {
       }
     });
 
-    // Look for the newsletter greeting/intro
+    // Look for the newsletter overview/description starting with "Good morning"
+    console.log("🔍 Looking for newsletter overview...");
     const greeting = $('p:contains("Good morning")').first();
-    if (greeting.length > 0) {
-      let introContent = this.cleanText(greeting.text());
 
-      // Get the next few paragraphs that might be part of the intro
-      let nextP = greeting.next("p");
-      let count = 0;
-      while (nextP.length > 0 && count < 2) {
-        const nextText = this.cleanText(nextP.text());
-        if (nextText && !nextText.includes("today's AI rundown:")) {
-          introContent += "\n\n" + nextText;
-        } else {
+    if (greeting.length > 0) {
+      console.log('✅ Found "Good morning" paragraph');
+      let overviewContent = this.cleanText(greeting.text());
+      console.log(
+        "📝 Starting content:",
+        overviewContent.substring(0, 100) + "..."
+      );
+
+      // Walk through subsequent elements until we hit the first <ul>
+      let currentElement = greeting.next();
+      let elementCount = 0;
+
+      while (currentElement.length > 0 && elementCount < 10) {
+        // Stop if we hit a <ul> element
+        if (currentElement.is("ul")) {
+          console.log("🛑 Found <ul>, stopping overview extraction");
           break;
         }
-        nextP = nextP.next("p");
-        count++;
+
+        // If it's a paragraph, add its content
+        if (currentElement.is("p")) {
+          const paragraphText = this.cleanText(currentElement.text());
+          if (paragraphText && paragraphText.length > 10) {
+            overviewContent += "\n\n" + paragraphText;
+            console.log(
+              "📄 Added paragraph:",
+              paragraphText.substring(0, 60) + "..."
+            );
+          }
+        }
+
+        currentElement = currentElement.next();
+        elementCount++;
       }
 
-      if (introContent) {
+      if (overviewContent) {
+        console.log(
+          "✅ Newsletter overview extracted, length:",
+          overviewContent.length
+        );
         sections.push({
-          type: "greeting",
-          title: "Daily Greeting",
-          content: introContent,
+          type: "newsletter-overview",
+          title: "Newsletter Overview",
+          content: overviewContent,
           order,
         });
       }
+    } else {
+      console.log('❌ No "Good morning" paragraph found');
     }
   }
 

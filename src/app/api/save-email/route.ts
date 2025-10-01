@@ -1,4 +1,4 @@
-import { getDatabase } from "@/lib/mongodb";
+import { getDatabase } from "@/lib/database/mongodb";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {

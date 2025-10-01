@@ -1,6 +1,6 @@
 "use client";
 
-import EmailFolders from "@/components/EmailFolders";
+import EmailFolders from "@/components/email/EmailFolders";
 import { loginRequest } from "@/lib/authConfig";
 import { useMsal } from "@azure/msal-react";
 import {

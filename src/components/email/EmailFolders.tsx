@@ -1,6 +1,6 @@
 "use client";
 
-import { GraphService } from "@/lib/graphService";
+import { GraphService } from "@/lib/services/graphService";
 import { useMsal } from "@azure/msal-react";
 import {
   Alert,

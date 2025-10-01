@@ -1,4 +1,4 @@
-import { NewsletterParser } from "../newsletter-types";
+import { NewsletterParser } from "@/types/newsletter-types";
 import { DailyTheRundownAiParser } from "./daily-therundown-ai";
 
 // Parser registry - add new parsers here

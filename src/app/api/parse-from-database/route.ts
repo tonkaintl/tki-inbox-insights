@@ -1,4 +1,4 @@
-import { getDatabase } from "@/lib/mongodb";
+import { getDatabase } from "@/lib/database/mongodb";
 import { ParserFactory } from "@/lib/parsers";
 import { NextResponse } from "next/server";
 
