@@ -88,7 +88,6 @@ export async function POST(request: Request) {
       message: `Newsletter parsed using ${parser.name} parser`,
       insertedId: result._id,
       parserId: parser.name,
-      sectionsFound: parsedNewsletter.sections.length,
       linksFound: parsedNewsletter.links.length,
       htmlContentLength: htmlContent.length,
       contentType: email.body?.contentType || "text/plain",

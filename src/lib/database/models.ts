@@ -1,6 +1,6 @@
-import mongoose, { Document, Schema } from "mongoose";
+﻿import mongoose, { Document, Schema } from "mongoose";
 
-// Email Address Schema
+// Email Address Schema for nested objects
 const EmailAddressSchema = new Schema(
   {
     address: {
@@ -17,14 +17,14 @@ const EmailAddressSchema = new Schema(
   { _id: false }
 );
 
-// Email Body Schema
+// Email Body Schema for nested objects  
 const EmailBodySchema = new Schema(
   {
     content: {
       type: String,
       required: true,
     },
-    contentType: {
+    content_type: {
       type: String,
       enum: ["text/plain", "text/html"],
       default: "text/html",
@@ -33,10 +33,10 @@ const EmailBodySchema = new Schema(
   { _id: false }
 );
 
-// Email From Schema
+// Email From Schema for nested objects
 const EmailFromSchema = new Schema(
   {
-    emailAddress: {
+    email_address: {
       type: EmailAddressSchema,
       required: true,
     },
@@ -49,22 +49,23 @@ export interface IEmail extends Document {
   id: string;
   subject: string;
   from: {
-    emailAddress: {
+    email_address: {
       address: string;
       name?: string;
     };
   };
   body: {
     content: string;
-    contentType: "text/plain" | "text/html";
+    content_type: "text/plain" | "text/html";
   };
-  receivedDateTime: string;
-  bodyPreview?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  received_date_time: string;
+  body_preview?: string;
+  folder_id: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
-// Email Schema
+// Email Schema with snake_case field names
 const EmailSchema = new Schema<IEmail>(
   {
     id: {
@@ -86,55 +87,26 @@ const EmailSchema = new Schema<IEmail>(
       type: EmailBodySchema,
       required: true,
     },
-    receivedDateTime: {
+    received_date_time: {
       type: String,
       required: true,
     },
-    bodyPreview: {
+    body_preview: {
       type: String,
       trim: true,
     },
+    folder_id: {
+      type: String,
+      required: true,
+      index: true,
+    },
   },
   {
-    timestamps: true, // Adds createdAt and updatedAt
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   }
 );
 
-// Newsletter Section Schema
-const NewsletterSectionSchema = new Schema(
-  {
-    type: {
-      type: String,
-      required: true,
-      enum: [
-        "newsletter-overview",
-        "header",
-        "rundown-topics", // This is where parseIntro results go!
-        "latest-developments",
-        "quick-hits",
-        "community",
-        "footer",
-      ],
-    },
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    content: {
-      type: String,
-      required: true,
-    },
-    order: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-  },
-  { _id: false }
-);
-
-// Extracted Link Schema
+// Extracted Link Schema for nested objects
 const ExtractedLinkSchema = new Schema(
   {
     url: {
@@ -155,7 +127,7 @@ const ExtractedLinkSchema = new Schema(
     category: {
       type: String,
       required: true,
-      enum: ["news", "tutorial", "vendor", "community", "tool"],
+      enum: ["news", "tutorial", "vendor", "community", "tool", "sponsor", "product", "other"],
     },
   },
   { _id: false }
@@ -164,37 +136,24 @@ const ExtractedLinkSchema = new Schema(
 // Parsed Newsletter Document Interface
 export interface IParsedNewsletter extends Document {
   id: string;
-  emailId: string;
+  email_id: string;
   sender: string;
   subject: string;
   date: string;
-  parserUsed: string;
-  sections: Array<{
-    type:
-      | "newsletter-overview"
-      | "header"
-      | "rundown-topics"
-      | "latest-developments"
-      | "quick-hits"
-      | "community"
-      | "footer";
-    title: string;
-    content: string;
-    order: number;
-  }>;
+  parser_used: string;
   links: Array<{
     url: string;
     text: string;
     section: string;
-    category: "news" | "tutorial" | "vendor" | "community" | "tool";
+    category: "news" | "tutorial" | "vendor" | "community" | "tool" | "sponsor" | "product" | "other";
   }>;
-  parsedAt: Date;
+  parsed_at: Date;
   version: string;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 
-// Parsed Newsletter Schema
+// Parsed Newsletter Schema with snake_case field names
 const ParsedNewsletterSchema = new Schema<IParsedNewsletter>(
   {
     id: {
@@ -203,7 +162,7 @@ const ParsedNewsletterSchema = new Schema<IParsedNewsletter>(
       unique: true,
       index: true,
     },
-    emailId: {
+    email_id: {
       type: String,
       required: true,
       index: true,
@@ -223,26 +182,22 @@ const ParsedNewsletterSchema = new Schema<IParsedNewsletter>(
       type: String,
       required: true,
     },
-    parserUsed: {
+    parser_used: {
       type: String,
       required: true,
       trim: true,
     },
-    sections: {
-      type: [NewsletterSectionSchema],
-      required: true,
-      validate: {
-        validator: function (sections: unknown[]) {
-          return Array.isArray(sections) && sections.length > 0;
-        },
-        message: "At least one section is required",
-      },
-    },
     links: {
       type: [ExtractedLinkSchema],
-      default: [],
+      required: true,
+      validate: {
+        validator: function (links: unknown[]) {
+          return Array.isArray(links) && links.length > 0;
+        },
+        message: "At least one link is required",
+      },
     },
-    parsedAt: {
+    parsed_at: {
       type: Date,
       required: true,
       default: Date.now,
@@ -254,19 +209,23 @@ const ParsedNewsletterSchema = new Schema<IParsedNewsletter>(
     },
   },
   {
-    timestamps: true,
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   }
 );
 
-// Indexes for better performance
-EmailSchema.index({ "from.emailAddress.address": 1 });
-EmailSchema.index({ receivedDateTime: -1 });
-ParsedNewsletterSchema.index({ sender: 1 });
-ParsedNewsletterSchema.index({ parsedAt: -1 });
+// Create indexes for better query performance
+EmailSchema.index({ "from.email_address.address": 1 });
+EmailSchema.index({ received_date_time: -1 });
+EmailSchema.index({ folder_id: 1 });
 
-// Models
+ParsedNewsletterSchema.index({ sender: 1 });
+ParsedNewsletterSchema.index({ parsed_at: -1 });
+ParsedNewsletterSchema.index({ email_id: 1 });
+
+// Export models with snake_case collection names
 export const Email =
-  mongoose.models.Email || mongoose.model<IEmail>("Email", EmailSchema);
+  mongoose.models.emails || mongoose.model<IEmail>("emails", EmailSchema);
+
 export const ParsedNewsletter =
-  mongoose.models.ParsedNewsletter ||
-  mongoose.model<IParsedNewsletter>("ParsedNewsletter", ParsedNewsletterSchema);
+  mongoose.models.parsed_newsletters ||
+  mongoose.model<IParsedNewsletter>("parsed_newsletters", ParsedNewsletterSchema);

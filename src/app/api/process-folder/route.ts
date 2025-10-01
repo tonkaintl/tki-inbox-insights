@@ -2,6 +2,7 @@ import { Email, ParsedNewsletter } from "@/lib/database/models";
 import connectToDatabase from "@/lib/database/mongoose";
 import { ParserFactory } from "@/lib/parsers";
 import { GraphService } from "@/lib/services/graphService";
+import { cleanSubject, getParserByEmail } from "@/types/newsletter-types";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -52,44 +53,52 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Filter for daily rundown emails
-    const dailyRundownEmails = allEmails.filter((email) => {
+    // Filter for emails we can parse (based on parser email mappings)
+    const parseableEmails = allEmails.filter((email) => {
       const fromAddress = email.from.emailAddress.address.toLowerCase();
-      return (
-        fromAddress.includes("news@daily.therundown.ai") ||
-        fromAddress.includes("daily.therundown.ai")
-      );
+      const parserType = getParserByEmail(fromAddress);
+      return parserType !== null;
     });
 
-    console.log(`📮 Found ${dailyRundownEmails.length} daily rundown emails`);
+    console.log(
+      `📮 Found ${parseableEmails.length} parseable newsletter emails`
+    );
 
-    if (dailyRundownEmails.length === 0) {
+    if (parseableEmails.length === 0) {
       return NextResponse.json({
         success: true,
         data: {
           processed: 0,
           saved: 0,
           links: 0,
-          message: `No daily rundown emails found in ${folderName} folder`,
+          message: `No parseable newsletter emails found in ${folderName} folder`,
         },
       });
     }
 
-    // Process each daily rundown email
+    // Process each parseable email
     let processedCount = 0;
     let savedCount = 0;
     let totalLinks = 0;
-    const parser = ParserFactory.getParser("news@daily.therundown.ai");
 
-    if (!parser) {
-      return NextResponse.json({
-        success: false,
-        error: "No parser available for daily rundown emails",
-      });
-    }
-
-    for (const email of dailyRundownEmails) {
+    for (const email of parseableEmails) {
       try {
+        // Get the parser for this email address
+        const fromAddress = email.from.emailAddress.address.toLowerCase();
+        const parserType = getParserByEmail(fromAddress);
+        if (!parserType) {
+          console.log(`⏭️ No parser available for: ${fromAddress}`);
+          continue;
+        }
+
+        const parser = ParserFactory.getParser(fromAddress);
+        if (!parser) {
+          console.log(
+            `⏭️ Parser factory couldn't create parser for: ${fromAddress}`
+          );
+          continue;
+        }
+
         // Check if we already processed this email (deduplication by ID)
         const existingEmail = await Email.findOne({ id: email.id });
         if (existingEmail) {
@@ -112,28 +121,24 @@ export async function POST(request: NextRequest) {
           return "text/html";
         };
 
-        // Save the raw email first
+        // Save the raw email first with snake_case fields
         const savedEmail = new Email({
           id: email.id,
-          subject: email.subject,
+          subject: cleanSubject(email.subject), // Clean emojis from subject
           from: {
-            emailAddress: {
+            email_address: {
               address: email.from.emailAddress.address,
               name:
                 email.from.emailAddress.name || email.from.emailAddress.address,
             },
           },
-          receivedDateTime: new Date(email.receivedDateTime),
+          received_date_time: email.receivedDateTime, // Keep as string
           body: {
             content: fullEmail.body?.content || "",
-            contentType: normalizeContentType(fullEmail.body?.contentType),
+            content_type: normalizeContentType(fullEmail.body?.contentType),
           },
-          bodyPreview: email.bodyPreview || "",
-          importance: "normal", // Default since not in basic message
-          hasAttachments: false, // Default since not in basic message
-          internetMessageId: "", // Default since not in basic message
-          folderId: folderId,
-          categories: [], // Default since not in basic message
+          body_preview: email.bodyPreview || "",
+          folder_id: folderId,
         });
 
         await savedEmail.save();
@@ -142,17 +147,27 @@ export async function POST(request: NextRequest) {
         const parsedNewsletter = parser.parse(fullEmail.body?.content || "", {
           id: email.id,
           sender: email.from.emailAddress.address,
-          subject: email.subject,
+          subject: cleanSubject(email.subject), // Clean emojis from subject
           date: email.receivedDateTime, // Keep as string as expected by the parser
         });
 
-        // Check if we already have a parsed version (extra safety)
+        // Check if we already have a parsed version (extra safety) - using snake_case field
         const existingParsed = await ParsedNewsletter.findOne({
-          emailId: email.id,
+          email_id: email.id,
         });
         if (!existingParsed) {
-          // Save the parsed newsletter
-          const savedParsed = new ParsedNewsletter(parsedNewsletter);
+          // Save the parsed newsletter with snake_case fields
+          const savedParsed = new ParsedNewsletter({
+            id: parsedNewsletter.id,
+            email_id: parsedNewsletter.email_id, // Already snake_case
+            sender: parsedNewsletter.sender,
+            subject: cleanSubject(parsedNewsletter.subject), // Clean emojis
+            date: parsedNewsletter.date,
+            parser_used: parsedNewsletter.parser_used, // Already snake_case
+            links: parsedNewsletter.links, // Links should already be in correct format
+            parsed_at: parsedNewsletter.parsed_at,
+            version: parsedNewsletter.version,
+          });
           await savedParsed.save();
 
           totalLinks += parsedNewsletter.links.length;
@@ -163,7 +178,7 @@ export async function POST(request: NextRequest) {
 
         if (processedCount % 10 === 0) {
           console.log(
-            `✅ Processed ${processedCount}/${dailyRundownEmails.length} emails`
+            `✅ Processed ${processedCount}/${parseableEmails.length} emails`
           );
         }
       } catch (emailError) {

@@ -42,13 +42,7 @@ async function testNewsletterParsing() {
   const result = parser.parse(html, emailMetadata);
 
   console.log("📄 Parsing results:");
-  console.log(`  Sections found: ${result.sections.length}`);
   console.log(`  Links found: ${result.links.length}`);
-
-  result.sections.forEach((section, index) => {
-    console.log(`  ${index + 1}. ${section.title} (${section.type})`);
-    console.log(`     Content: ${section.content.substring(0, 80)}...`);
-  });
 
   // Final output: Show category breakdown
   console.log("\n" + "=".repeat(80));
@@ -71,7 +65,7 @@ async function testNewsletterParsing() {
   }, {} as Record<string, number>);
 
   const duplicates = Object.entries(urlCounts).filter(
-    ([url, count]) => count > 1
+    ([, count]) => count > 1
   );
 
   console.log("\n� DUPLICATE CHECK:");

@@ -14,21 +14,41 @@ export const LinkCategory = {
 
 export type LinkCategoryType = (typeof LinkCategory)[keyof typeof LinkCategory];
 
+// Parser types for different newsletter sources
+export const ParserType = {
+  DAILY_THERUNDOWN_AI: "daily-therundown-ai",
+  MORNING_BREW: "morning-brew",
+  TECHCRUNCH: "techcrunch",
+  AI_BREAKFAST: "ai-breakfast",
+  THE_BATCH: "the-batch",
+} as const;
+
+export type ParserTypeEnum = (typeof ParserType)[keyof typeof ParserType];
+
+// Email address to parser mapping
+export const PARSER_EMAIL_MAP: Record<string, ParserTypeEnum> = {
+  "news@daily.therundown.ai": ParserType.DAILY_THERUNDOWN_AI,
+  "crew@morningbrew.com": ParserType.MORNING_BREW,
+  "newsletters@techcrunch.com": ParserType.TECHCRUNCH,
+  "info@aibreakfast.beehiiv.com": ParserType.AI_BREAKFAST,
+  "thebatch@deeplearning.ai": ParserType.THE_BATCH,
+};
+
 export interface ParsedNewsletter {
   // Metadata
   id: string;
-  emailId: string; // Reference to original email in MongoDB
+  email_id: string; // Reference to original email in MongoDB
   sender: string;
-  subject: string;
+  subject: string; // Clean subject (no emojis)
   date: string;
-  parserUsed: string; // "daily-therundown-ai", "morning-brew", etc.
+  parser_used: ParserTypeEnum; // Parser enum type
 
-  // Parsed Content - flexible structure
-  sections: NewsletterSection[];
+  // Parsed Content - focus on links (sections optional/minimal)
+  sections?: NewsletterSection[]; // Optional, only if meaningful content
   links: ExtractedLink[];
 
   // Processing info
-  parsedAt: Date;
+  parsed_at: Date;
   version: string; // Parser version for future updates
 }
 
@@ -74,4 +94,21 @@ export interface EmailMetadata {
   sender: string;
   subject: string;
   date: string;
+}
+
+// Utility functions
+export function getParserByEmail(emailAddress: string): ParserTypeEnum | null {
+  const normalizedEmail = emailAddress.toLowerCase().trim();
+  return PARSER_EMAIL_MAP[normalizedEmail] || null;
+}
+
+export function cleanSubject(subject: string): string {
+  // Remove emojis and clean whitespace
+  return subject
+    .replace(
+      /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu,
+      ""
+    )
+    .replace(/\s+/g, " ")
+    .trim();
 }
