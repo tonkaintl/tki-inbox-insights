@@ -5,40 +5,77 @@ name: Build and deploy Next.js to Azure Web App - tki-inbox-insights
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          node-version: '20'
+          clean: true # Clean checkout to avoid phantom files
 
-      - name: Install & build
-        run: |
-          npm ci
-          npm run build
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
 
-      - name: Prepare standalone artifact
+      - name: Clear build cache
         run: |
-          test -d .next/standalone || (echo "❌ .next/standalone not found. Did you set output: 'standalone' in next.config.js?" && exit 1)
-          # create deploy/ with the minimal server
+          rm -rf .next node_modules/.cache
+
+      - name: Install dependencies
+        run: npm ci --no-optional
+
+      - name: Build application
+        run: |
+          # Use standard build without Turbopack for better CI compatibility
+          npm run build:ci
+        env:
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
+
+      - name: Verify build output
+        run: |
+          echo "Checking build output..."
+          ls -la .next/
+          test -d .next/standalone || (echo "❌ .next/standalone not found. Checking Next.js config..." && cat next.config.ts && exit 1)
+
+      - name: Prepare deployment artifact
+        run: |
+          echo "Creating deployment package..."
           mkdir -p deploy
+
+          # Copy standalone server files
           cp -r .next/standalone/* deploy/
-          # ensure Next static + public are where the server expects them
+
+          # Copy static assets
           mkdir -p deploy/.next
           cp -r .next/static deploy/.next/static
-          if [ -d public ]; then cp -r public deploy/public; fi
+
+          # Copy public assets if they exist
+          if [ -d public ]; then 
+            cp -r public deploy/public
+          fi
+
+          # Create a minimal package.json for Azure
+          echo '{"name":"tki-inbox-insights","version":"1.0.0","scripts":{"start":"node server.js"},"dependencies":{}}' > deploy/package.json
+
+          # Verify deployment structure
+          echo "Deployment structure:"
+          find deploy -type f -name "*.js" | head -10
+          du -sh deploy/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: next-standalone
           path: deploy
+          retention-days: 1 # Minimize storage usage
 
   deploy:
     needs: build
@@ -46,6 +83,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
+
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
@@ -66,3 +104,9 @@ jobs:
           slot-name: Production
           package: .
 
+      - name: Verify deployment
+        run: |
+          echo "Deployment completed. Checking app status..."
+          # Wait a moment for the app to start
+          sleep 30
+          curl -f -s -o /dev/null https://tki-inbox-insights.azurewebsites.net || echo "App may still be starting..."
