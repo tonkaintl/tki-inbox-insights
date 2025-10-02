@@ -1,6 +1,7 @@
 "use client";
 
 import EmailFolders from "@/components/email/EmailFolders";
+import { MSALWrapper } from "@/components/layout/MSALWrapper";
 import ProcessFolderButton from "@/components/ProcessFolderButton";
 import { loginRequest } from "@/lib/authConfig";
 import { useMsal } from "@azure/msal-react";
@@ -12,9 +13,10 @@ import {
   Container,
   Typography,
 } from "@mui/joy";
+import NextLink from "next/link";
 import { useState } from "react";
 
-export default function Home() {
+function HomeContent() {
   const { instance, accounts } = useMsal();
   const [selectedFolder, setSelectedFolder] = useState<{
     id: string;
@@ -68,6 +70,19 @@ export default function Home() {
             <Box
               sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 4 }}
             >
+              <NextLink href="/results">
+                <Button size="lg">📊 View Results</Button>
+              </NextLink>
+              <NextLink href="/links">
+                <Button size="lg" variant="soft">
+                  📎 Link Content
+                </Button>
+              </NextLink>
+              <NextLink href="/links-enhanced">
+                <Button size="lg" variant="soft" color="success">
+                  🔗 Enhanced Links
+                </Button>
+              </NextLink>
               <Button variant="outlined" onClick={handleLogout}>
                 Sign Out
               </Button>
@@ -98,5 +113,13 @@ export default function Home() {
         )}
       </Box>
     </Container>
+  );
+}
+
+export default function Home() {
+  return (
+    <MSALWrapper>
+      <HomeContent />
+    </MSALWrapper>
   );
 }

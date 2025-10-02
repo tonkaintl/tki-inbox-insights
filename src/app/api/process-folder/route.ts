@@ -38,9 +38,9 @@ export async function POST(request: NextRequest) {
     // Initialize Graph service with access token
     const graphService = new GraphService(accessToken);
 
-    // Get ALL emails from the folder (no limit - we'll use a large number)
+    // Get ALL emails from the folder with proper pagination
     console.log(`📧 Fetching all emails from ${folderName} folder...`);
-    const allEmails = await graphService.getMessages(folderId, 1000); // Large number to get most emails
+    const allEmails = await graphService.getAllMessages(folderId);
 
     console.log(
       `📧 Retrieved ${allEmails.length} total emails from ${folderName} folder`

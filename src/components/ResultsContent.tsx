@@ -1,5 +1,6 @@
 "use client";
 
+import { formatDateConsistently } from "@/lib/utils/email-utils";
 import {
   Alert,
   Box,
@@ -10,10 +11,12 @@ import {
   Table,
   Typography,
 } from "@mui/joy";
+import NextLink from "next/link";
 import { useEffect, useState } from "react";
 
 interface ParsedNewsletter {
   _id: string;
+  email_id: string;
   subject: string;
   sender: string;
   date: string;
@@ -142,22 +145,32 @@ export function ResultsContent() {
                 <th>Parser</th>
                 <th>Links</th>
                 <th>Processed</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {newsletters.map((newsletter) => (
                 <tr key={newsletter._id}>
                   <td>
-                    <Typography level="body-sm" sx={{ fontWeight: "bold" }}>
-                      {newsletter.subject}
-                    </Typography>
+                    <NextLink
+                      href={`/results/${newsletter.email_id}`}
+                      style={{
+                        textDecoration: "none",
+                        color: "inherit",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <Typography level="body-sm" sx={{ fontWeight: "bold" }}>
+                        {newsletter.subject}
+                      </Typography>
+                    </NextLink>
                   </td>
                   <td>
                     <Typography level="body-sm">{newsletter.sender}</Typography>
                   </td>
                   <td>
                     <Typography level="body-sm">
-                      {new Date(newsletter.date).toLocaleDateString()}
+                      {formatDateConsistently(newsletter.date)}
                     </Typography>
                   </td>
                   <td>
@@ -172,8 +185,15 @@ export function ResultsContent() {
                   </td>
                   <td>
                     <Typography level="body-sm">
-                      {new Date(newsletter.parsed_at).toLocaleString()}
+                      {formatDateConsistently(newsletter.parsed_at)}
                     </Typography>
+                  </td>
+                  <td>
+                    <NextLink href={`/results/${newsletter.email_id}`}>
+                      <Button size="sm" variant="soft">
+                        View Links
+                      </Button>
+                    </NextLink>
                   </td>
                 </tr>
               ))}

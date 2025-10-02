@@ -1,6 +1,7 @@
+"use client";
+
 import { ResultsContent } from "@/components/ResultsContent";
-import { Box, CircularProgress, Typography } from "@mui/joy";
-import { Suspense } from "react";
+import { Box, Typography } from "@mui/joy";
 
 export default function ResultsPage() {
   return (
@@ -9,15 +10,7 @@ export default function ResultsPage() {
         📊 Processing Results
       </Typography>
 
-      <Suspense
-        fallback={
-          <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
-            <CircularProgress size="lg" />
-          </Box>
-        }
-      >
-        <ResultsContent />
-      </Suspense>
+      <ResultsContent />
     </Box>
   );
 }

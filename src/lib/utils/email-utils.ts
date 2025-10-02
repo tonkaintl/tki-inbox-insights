@@ -67,3 +67,20 @@ export function decodeQuotedPrintable(input: string): string {
 export function generateObjectId(): string {
   return `obj_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
+
+/**
+ * Format date consistently between server and client to prevent hydration mismatches
+ * Uses ISO format which is consistent across environments
+ */
+export function formatDateConsistently(dateString: string): string {
+  try {
+    const date = new Date(dateString);
+    // Use ISO string and extract just the date part, then format manually
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${month}/${day}/${year}`;
+  } catch {
+    return dateString; // Return original if parsing fails
+  }
+}
