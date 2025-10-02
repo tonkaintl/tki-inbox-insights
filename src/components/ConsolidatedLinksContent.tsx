@@ -120,6 +120,7 @@ export default function ConsolidatedLinksContent() {
 
   useEffect(() => {
     fetchConsolidatedLinks(selectedDomain, resolveUrls);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDomain, resolveUrls]);
 
   // Cleanup on unmount

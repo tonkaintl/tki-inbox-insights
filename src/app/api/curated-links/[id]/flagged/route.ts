@@ -5,11 +5,12 @@ import { NextResponse } from "next/server";
 // PATCH /api/curated-links/[id]/flagged - Toggle flagged status
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
+    const { id } = await params;
     const body = await request.json();
     const { flagged } = body;
 
@@ -24,7 +25,7 @@ export async function PATCH(
     }
 
     const link = await CuratedLink.findOneAndUpdate(
-      { id: params.id },
+      { id },
       { $set: { flagged } },
       { new: true, runValidators: true }
     ).lean();
