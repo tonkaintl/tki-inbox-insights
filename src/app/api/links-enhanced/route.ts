@@ -3,14 +3,30 @@ import connectToDatabase from "@/lib/database/mongoose";
 import { UrlResolverService } from "@/lib/services/urlResolverService";
 import { NextResponse } from "next/server";
 
-// Enhanced link data structure
-interface EnhancedLink {
-  text: string;
+// Helper function to extract domain from URL
+function extractDomain(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return "invalid-url";
+  }
+}
+
+interface LinkType {
   url: string;
-  resolvedUrl?: string;
+  text: string;
+  section: string;
   category: string;
+}
+
+interface EnhancedLink {
+  url: string;
+  text: string;
+  section: string;
+  domain: string;
   count: number;
   newsletters: string[];
+  resolvedUrl?: string;
   isResolved: boolean;
   resolutionStatus?: string;
 }
@@ -21,121 +37,155 @@ export async function GET(request: Request) {
 
     const url = new URL(request.url);
     const resolve = url.searchParams.get("resolve") === "true";
-    const category = url.searchParams.get("category");
+    const domain = url.searchParams.get("domain");
 
-    console.log(
-      `Fetching consolidated links (resolve: ${resolve}, category: ${category})`
+    // Get all newsletters with their links
+    const newsletters = await ParsedNewsletter.find({})
+      .select("links subject email_id")
+      .lean();
+
+    // Create a Map to deduplicate by link text since URLs are all redirects
+    const linkMap = new Map<string, EnhancedLink>();
+
+    newsletters.forEach((newsletter) => {
+      newsletter.links.forEach((link: LinkType) => {
+        if (linkMap.has(link.text)) {
+          // Text already exists, increment count and add newsletter
+          const existing = linkMap.get(link.text)!;
+          existing.count += 1;
+          if (!existing.newsletters.includes(newsletter.subject)) {
+            existing.newsletters.push(newsletter.subject);
+          }
+        } else {
+          // New text, create entry
+          linkMap.set(link.text, {
+            url: link.url,
+            text: link.text,
+            section: link.section,
+            domain: extractDomain(link.url), // Will be updated with resolved domain later
+            count: 1,
+            newsletters: [newsletter.subject],
+            isResolved: false,
+            resolutionStatus: "not_attempted",
+          });
+        }
+      });
+    });
+
+    // Convert Map to array and sort by count (most frequent first)
+    let consolidatedLinks = Array.from(linkMap.values()).sort(
+      (a, b) => b.count - a.count
     );
 
-    // Build match condition for category filter
-    const matchCondition: Record<string, string> = {};
-    if (category && category !== "all") {
-      matchCondition["links.category"] = category;
+    // Filter by domain if specified
+    if (domain && domain !== "all") {
+      consolidatedLinks = consolidatedLinks.filter(
+        (link) => link.domain === domain
+      );
     }
 
-    // Get all links with aggregation
-    const results = await ParsedNewsletter.aggregate([
-      { $unwind: "$links" },
-      ...(Object.keys(matchCondition).length > 0
-        ? [{ $match: matchCondition }]
-        : []),
-      {
-        $group: {
-          _id: "$links.text", // Group by link text instead of URL
-          urls: { $addToSet: "$links.url" }, // Collect unique URLs for this text
-          category: { $first: "$links.category" },
-          newsletters: { $addToSet: "$subject" },
-          count: { $sum: 1 },
-        },
-      },
-      { $sort: { count: -1 } },
-    ]);
+    // Check for existing resolved URLs from database only (no HTTP requests)
+    const urlsToCheck = consolidatedLinks.map((link) => link.url);
+    const { ResolvedUrl } = await import("@/lib/database/models");
+    const existingResolutions = await ResolvedUrl.find({
+      original_url: { $in: urlsToCheck },
+    });
+    const resolutionMap = new Map(
+      existingResolutions.map((r) => [r.original_url, r])
+    );
 
-    console.log(`Found ${results.length} unique links`);
+    // Apply existing resolutions from database
+    consolidatedLinks = consolidatedLinks.map((link) => {
+      const existingResolution = resolutionMap.get(link.url);
+      if (existingResolution) {
+        return {
+          ...link,
+          resolvedUrl: existingResolution.resolved_url,
+          domain: extractDomain(existingResolution.resolved_url), // Use resolved domain
+          isResolved: existingResolution.status === "resolved",
+          resolutionStatus: existingResolution.status,
+        };
+      }
+      return link;
+    });
 
-    // Convert to enhanced links format
-    let enhancedLinks: EnhancedLink[] = results.map((result) => ({
-      text: result._id,
-      url: result.urls[0], // Use first URL as primary
-      category: result.category,
-      count: result.count,
-      newsletters: result.newsletters,
-      isResolved: false,
-      resolutionStatus: "pending",
-    }));
-
-    // Resolve URLs if requested
+    // If resolve=true, resolve additional URLs
     if (resolve) {
-      console.log("Resolving URLs...");
-      const urlsToResolve = enhancedLinks.map((link) => link.url);
+      const unresolvedUrls = consolidatedLinks
+        .filter(
+          (link) => !link.resolvedUrl || link.resolutionStatus === "failed"
+        )
+        .map((link) => link.url);
 
-      try {
-        const resolutions = await UrlResolverService.resolveUrls(urlsToResolve);
+      if (unresolvedUrls.length > 0) {
+        try {
+          const newResolutions = await UrlResolverService.resolveUrls(
+            unresolvedUrls
+          );
+          const newResolutionMap = new Map(
+            newResolutions.map((r) => [r.originalUrl, r])
+          );
 
-        // Map resolved URLs back to links
-        const resolutionMap = new Map(
-          resolutions.map((r) => [r.originalUrl, r])
-        );
-
-        enhancedLinks = enhancedLinks.map((link) => {
-          const resolution = resolutionMap.get(link.url);
-          if (resolution) {
-            return {
-              ...link,
-              resolvedUrl: resolution.resolvedUrl,
-              isResolved: resolution.status === "resolved",
-              resolutionStatus: resolution.status,
-            };
-          }
-          return link;
-        });
-
-        console.log(`Resolved ${resolutions.length} URLs`);
-      } catch (error) {
-        console.error("Error resolving URLs:", error);
-        // Continue without resolution if there's an error
+          consolidatedLinks = consolidatedLinks.map((link) => {
+            const newResolution = newResolutionMap.get(link.url);
+            if (newResolution) {
+              return {
+                ...link,
+                resolvedUrl: newResolution.resolvedUrl,
+                domain: extractDomain(newResolution.resolvedUrl), // Use resolved domain
+                isResolved: newResolution.status === "resolved",
+                resolutionStatus: newResolution.status,
+              };
+            }
+            return link;
+          });
+        } catch (error) {
+          console.error("Error resolving URLs:", error);
+        }
       }
     }
 
-    // Group by category for response
-    const linksByCategory = enhancedLinks.reduce((acc, link) => {
-      if (!acc[link.category]) {
-        acc[link.category] = [];
+    // Group by domain for response
+    const linksByDomain = consolidatedLinks.reduce((acc, link) => {
+      if (!acc[link.domain]) {
+        acc[link.domain] = [];
       }
-      acc[link.category].push(link);
+      acc[link.domain].push(link);
       return acc;
     }, {} as Record<string, EnhancedLink[]>);
 
-    // Get available categories for filtering
-    const categories = Object.keys(linksByCategory).sort();
+    const domains = Object.keys(linksByDomain).sort();
 
-    // Calculate stats
     const stats = {
-      totalLinks: enhancedLinks.length,
-      totalOccurrences: enhancedLinks.reduce(
+      totalLinks: consolidatedLinks.length,
+      totalOccurrences: consolidatedLinks.reduce(
         (sum, link) => sum + link.count,
         0
       ),
-      categoryCounts: categories.reduce((acc, cat) => {
-        acc[cat] = linksByCategory[cat].length;
+      domainCounts: domains.reduce((acc, domain) => {
+        acc[domain] = linksByDomain[domain].length;
         return acc;
       }, {} as Record<string, number>),
-      resolved: resolve ? enhancedLinks.filter((l) => l.isResolved).length : 0,
+      resolved: consolidatedLinks.filter((l) => l.isResolved).length,
       resolutionRequested: resolve,
     };
 
     return NextResponse.json({
       success: true,
       data: {
-        linksByCategory,
-        categories,
+        linksByDomain,
+        domains,
         stats,
       },
     });
   } catch (error) {
-    console.error("Error fetching consolidated links:", error);
+    console.error("❌ Error fetching consolidated links:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to fetch consolidated links" },
+      {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+        links: [],
+      },
       { status: 500 }
     );
   }

@@ -1,5 +1,19 @@
-import ConsolidatedLinksContent from "@/components/ConsolidatedLinksContent";
+"use client";
+
 import { Box, Typography } from "@mui/joy";
+import dynamic from "next/dynamic";
+
+const ConsolidatedLinksContent = dynamic(
+  () => import("@/components/ConsolidatedLinksContent"),
+  {
+    ssr: false,
+    loading: () => (
+      <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
+        <Typography>Loading enhanced links...</Typography>
+      </Box>
+    ),
+  }
+);
 
 export default function EnhancedLinksPage() {
   return (

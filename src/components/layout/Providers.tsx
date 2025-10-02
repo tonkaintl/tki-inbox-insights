@@ -7,75 +7,63 @@ import CssBaseline from "@mui/joy/CssBaseline";
 import { CssVarsProvider } from "@mui/joy/styles";
 import { useEffect, useState } from "react";
 
-const loadingStyle = {
+const loadingStyle: React.CSSProperties = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   minHeight: "100vh",
   fontSize: "18px",
-};
+} as const;
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [msalInstance, setMsalInstance] =
     useState<PublicClientApplication | null>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Only initialize MSAL on client side
-    if (typeof window !== "undefined") {
-      try {
-        const instance = new PublicClientApplication(msalConfig);
+    // Mark as mounted first
+    setIsMounted(true);
 
-        instance
-          .initialize()
-          .then(() => {
-            // Handle redirect promise on page load
-            return instance.handleRedirectPromise();
-          })
-          .then(() => {
-            setMsalInstance(instance);
-            setIsInitialized(true);
-          })
-          .catch((error) => {
-            console.error("MSAL initialization error:", error);
-            setIsInitialized(true); // Still set initialized to show content
-          });
-      } catch (error) {
-        console.error("MSAL creation error:", error);
-        setIsInitialized(true);
-      }
+    // Then initialize MSAL
+    try {
+      const instance = new PublicClientApplication(msalConfig);
+
+      instance
+        .initialize()
+        .then(() => {
+          // Handle redirect promise on page load
+          return instance.handleRedirectPromise();
+        })
+        .then(() => {
+          setMsalInstance(instance);
+        })
+        .catch((error) => {
+          console.error("MSAL initialization error:", error);
+        });
+    } catch (error) {
+      console.error("MSAL creation error:", error);
     }
   }, []);
 
-  // Show loading state until MSAL is initialized
-  if (!isInitialized) {
-    return (
-      <CssVarsProvider>
-        <CssBaseline />
-        <div style={loadingStyle}>
-          Loading authentication...
-        </div>
-      </CssVarsProvider>
-    );
-  }
+  // During SSR and initial client render, always show children to avoid hydration mismatch
+  // Only show loading after component has mounted on client
+  const content = !isMounted ? (
+    children // Always render children during SSR and initial hydration
+  ) : !msalInstance ? (
+    <div style={loadingStyle}>Loading authentication...</div>
+  ) : (
+    children
+  );
 
-  // Render with or without MSAL provider based on initialization success
-  if (msalInstance) {
-    return (
-      <MsalProvider instance={msalInstance}>
-        <CssVarsProvider>
-          <CssBaseline />
-          {children}
-        </CssVarsProvider>
-      </MsalProvider>
-    );
-  }
-
-  // Fallback if MSAL failed to initialize
+  // Always render with consistent structure
   return (
     <CssVarsProvider>
       <CssBaseline />
-      {children}
+      {msalInstance ? (
+        <MsalProvider instance={msalInstance}>{content}</MsalProvider>
+      ) : (
+        content
+      )}
     </CssVarsProvider>
   );
 }
