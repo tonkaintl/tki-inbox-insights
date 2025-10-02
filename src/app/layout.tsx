@@ -1,3 +1,4 @@
+import { MSALErrorBoundary } from "@/components/layout/MSALErrorBoundary";
 import { Providers } from "@/components/layout/Providers";
 import type { Metadata } from "next";
 
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <MSALErrorBoundary>
+          <Providers>{children}</Providers>
+        </MSALErrorBoundary>
       </body>
     </html>
   );

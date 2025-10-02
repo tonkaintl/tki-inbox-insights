@@ -6,10 +6,9 @@ export async function GET() {
   try {
     await connectToDatabase();
 
-    // Get recent newsletters, limit to 50 for performance
+    // Get all newsletters, sorted by most recent
     const newsletters = await ParsedNewsletter.find({})
       .sort({ parsed_at: -1 })
-      .limit(50)
       .lean();
 
     return NextResponse.json({

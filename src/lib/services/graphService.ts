@@ -87,6 +87,59 @@ export class GraphService {
     return response.value;
   }
 
+  async getAllMessages(folderId: string): Promise<Message[]> {
+    const allMessages: Message[] = [];
+    let nextLink:
+      | string
+      | null = `/me/mailFolders/${folderId}/messages?$top=999&$select=id,subject,from,receivedDateTime,isRead,bodyPreview,webLink&$orderby=receivedDateTime desc`;
+
+    while (nextLink) {
+      try {
+        const headers = new Headers();
+        headers.append("Authorization", `Bearer ${this.accessToken}`);
+        headers.append("Content-Type", "application/json");
+
+        const url: string = nextLink.startsWith("http")
+          ? nextLink
+          : `https://graph.microsoft.com/v1.0${nextLink}`;
+
+        const response: Response = await fetch(url, {
+          method: "GET",
+          headers: headers,
+        });
+
+        if (!response.ok) {
+          console.error(
+            `Graph API error: ${response.status} ${response.statusText}`
+          );
+          break;
+        }
+
+        const data: GraphResponse<Message> & { "@odata.nextLink"?: string } =
+          await response.json();
+        allMessages.push(...data.value);
+
+        // Check for next page
+        nextLink = data["@odata.nextLink"] || null;
+
+        console.log(
+          `📄 Retrieved ${data.value.length} messages (total: ${allMessages.length})`
+        );
+
+        // Add small delay to avoid rate limiting
+        if (nextLink) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+      } catch (error) {
+        console.error("Error fetching messages page:", error);
+        break;
+      }
+    }
+
+    console.log(`✅ Total messages retrieved: ${allMessages.length}`);
+    return allMessages;
+  }
+
   async searchMessages(query: string, top: number = 25): Promise<Message[]> {
     const encodedQuery = encodeURIComponent(query);
     const response = await this.callGraphAPI<Message>(

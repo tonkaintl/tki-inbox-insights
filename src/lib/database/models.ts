@@ -17,7 +17,7 @@ const EmailAddressSchema = new Schema(
   { _id: false }
 );
 
-// Email Body Schema for nested objects  
+// Email Body Schema for nested objects
 const EmailBodySchema = new Schema(
   {
     content: {
@@ -102,7 +102,7 @@ const EmailSchema = new Schema<IEmail>(
     },
   },
   {
-    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
   }
 );
 
@@ -127,7 +127,16 @@ const ExtractedLinkSchema = new Schema(
     category: {
       type: String,
       required: true,
-      enum: ["news", "tutorial", "vendor", "community", "tool", "sponsor", "product", "other"],
+      enum: [
+        "news",
+        "tutorial",
+        "vendor",
+        "community",
+        "tool",
+        "sponsor",
+        "product",
+        "other",
+      ],
     },
   },
   { _id: false }
@@ -145,7 +154,15 @@ export interface IParsedNewsletter extends Document {
     url: string;
     text: string;
     section: string;
-    category: "news" | "tutorial" | "vendor" | "community" | "tool" | "sponsor" | "product" | "other";
+    category:
+      | "news"
+      | "tutorial"
+      | "vendor"
+      | "community"
+      | "tool"
+      | "sponsor"
+      | "product"
+      | "other";
   }>;
   parsed_at: Date;
   version: string;
@@ -209,18 +226,70 @@ const ParsedNewsletterSchema = new Schema<IParsedNewsletter>(
     },
   },
   {
-    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+  }
+);
+
+// Create additional indexes for better query performance (avoiding duplicates)
+EmailSchema.index({ "from.email_address.address": 1 });
+EmailSchema.index({ received_date_time: -1 });
+// folder_id already has index: true in schema
+
+ParsedNewsletterSchema.index({ sender: 1 });
+ParsedNewsletterSchema.index({ parsed_at: -1 });
+// email_id already has index: true in schema
+
+// Resolved URL Document Interface for caching URL resolutions
+export interface IResolvedUrl extends Document {
+  original_url: string;
+  resolved_url: string;
+  status: "resolved" | "failed" | "timeout" | "no_redirect";
+  attempts: number;
+  last_attempt: Date;
+  created_at: Date;
+  updated_at: Date;
+}
+
+// Resolved URL Schema
+const ResolvedUrlSchema = new Schema<IResolvedUrl>(
+  {
+    original_url: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+      trim: true,
+    },
+    resolved_url: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: ["resolved", "failed", "timeout", "no_redirect"],
+      default: "resolved",
+    },
+    attempts: {
+      type: Number,
+      required: true,
+      default: 1,
+    },
+    last_attempt: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+  },
+  {
+    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
   }
 );
 
 // Create indexes for better query performance
-EmailSchema.index({ "from.email_address.address": 1 });
-EmailSchema.index({ received_date_time: -1 });
-EmailSchema.index({ folder_id: 1 });
-
-ParsedNewsletterSchema.index({ sender: 1 });
-ParsedNewsletterSchema.index({ parsed_at: -1 });
-ParsedNewsletterSchema.index({ email_id: 1 });
+ResolvedUrlSchema.index({ status: 1 });
+ResolvedUrlSchema.index({ last_attempt: -1 });
 
 // Export models with snake_case collection names
 export const Email =
@@ -228,4 +297,11 @@ export const Email =
 
 export const ParsedNewsletter =
   mongoose.models.parsed_newsletters ||
-  mongoose.model<IParsedNewsletter>("parsed_newsletters", ParsedNewsletterSchema);
+  mongoose.model<IParsedNewsletter>(
+    "parsed_newsletters",
+    ParsedNewsletterSchema
+  );
+
+export const ResolvedUrl =
+  mongoose.models.resolved_urls ||
+  mongoose.model<IResolvedUrl>("resolved_urls", ResolvedUrlSchema);
