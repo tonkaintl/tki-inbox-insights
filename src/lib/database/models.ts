@@ -239,11 +239,39 @@ ParsedNewsletterSchema.index({ sender: 1 });
 ParsedNewsletterSchema.index({ parsed_at: -1 });
 // email_id already has index: true in schema
 
+// Curated Link Document Interface for link management and review
+export interface ICuratedLink extends Document {
+  id: string;
+  url: string;
+  text: string;
+  domain: string;
+  resolved_url?: string;
+  category:
+    | "news"
+    | "tutorial"
+    | "vendor"
+    | "community"
+    | "tool"
+    | "sponsor"
+    | "product"
+    | "other";
+  section: string;
+  count: number;
+  newsletters: string[]; // Array of newsletter subjects
+  reviewed: boolean;
+  flagged: boolean;
+  notes?: string;
+  first_seen: Date;
+  last_seen: Date;
+  created_at: Date;
+  updated_at: Date;
+}
+
 // Resolved URL Document Interface for caching URL resolutions
 export interface IResolvedUrl extends Document {
   original_url: string;
   resolved_url: string;
-  status: "resolved" | "failed" | "timeout" | "no_redirect";
+  status: "resolved" | "no_redirect" | "failed" | "timeout";
   attempts: number;
   last_attempt: Date;
   created_at: Date;
@@ -287,9 +315,112 @@ const ResolvedUrlSchema = new Schema<IResolvedUrl>(
   }
 );
 
+// Curated Link Schema
+const CuratedLinkSchema = new Schema<ICuratedLink>(
+  {
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
+    url: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
+    },
+    text: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    domain: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
+    },
+    resolved_url: {
+      type: String,
+      trim: true,
+    },
+    category: {
+      type: String,
+      required: true,
+      enum: [
+        "news",
+        "tutorial",
+        "vendor",
+        "community",
+        "tool",
+        "sponsor",
+        "product",
+        "other",
+      ],
+      index: true,
+    },
+    section: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    count: {
+      type: Number,
+      required: true,
+      default: 1,
+      min: 1,
+    },
+    newsletters: {
+      type: [String],
+      required: true,
+      validate: {
+        validator: function (newsletters: string[]) {
+          return Array.isArray(newsletters) && newsletters.length > 0;
+        },
+        message: "At least one newsletter is required",
+      },
+    },
+    reviewed: {
+      type: Boolean,
+      required: true,
+      default: false,
+      index: true,
+    },
+    flagged: {
+      type: Boolean,
+      required: true,
+      default: false,
+      index: true,
+    },
+    notes: {
+      type: String,
+      trim: true,
+    },
+    first_seen: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+    last_seen: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+  },
+  {
+    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+  }
+);
+
 // Create indexes for better query performance
 ResolvedUrlSchema.index({ status: 1 });
 ResolvedUrlSchema.index({ last_attempt: -1 });
+
+CuratedLinkSchema.index({ domain: 1, reviewed: 1 });
+CuratedLinkSchema.index({ flagged: 1 });
+CuratedLinkSchema.index({ first_seen: -1 });
+CuratedLinkSchema.index({ last_seen: -1 });
 
 // Export models with snake_case collection names
 export const Email =
@@ -305,3 +436,7 @@ export const ParsedNewsletter =
 export const ResolvedUrl =
   mongoose.models.resolved_urls ||
   mongoose.model<IResolvedUrl>("resolved_urls", ResolvedUrlSchema);
+
+export const CuratedLink =
+  mongoose.models.curated_links ||
+  mongoose.model<ICuratedLink>("curated_links", CuratedLinkSchema);
