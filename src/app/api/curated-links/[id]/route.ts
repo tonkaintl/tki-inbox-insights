@@ -5,12 +5,13 @@ import { NextResponse } from "next/server";
 // GET /api/curated-links/[id] - Get a specific curated link
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
-    const link = await CuratedLink.findOne({ id: params.id }).lean();
+    const { id } = await params;
+    const link = await CuratedLink.findOne({ id }).lean();
 
     if (!link) {
       return NextResponse.json(
@@ -41,11 +42,12 @@ export async function GET(
 // PATCH /api/curated-links/[id] - Update a specific curated link
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
+    const { id } = await params;
     const body = await request.json();
     const updates = { ...body };
 
@@ -65,7 +67,7 @@ export async function PATCH(
     }
 
     const link = await CuratedLink.findOneAndUpdate(
-      { id: params.id },
+      { id },
       { $set: updates },
       { new: true, runValidators: true }
     ).lean();
@@ -99,12 +101,13 @@ export async function PATCH(
 // DELETE /api/curated-links/[id] - Delete a specific curated link
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
-    const link = await CuratedLink.findOneAndDelete({ id: params.id }).lean();
+    const { id } = await params;
+    const link = await CuratedLink.findOneAndDelete({ id }).lean();
 
     if (!link) {
       return NextResponse.json(

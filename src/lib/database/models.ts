@@ -391,7 +391,6 @@ const CuratedLinkSchema = new Schema<ICuratedLink>(
       type: Boolean,
       required: true,
       default: false,
-      index: true,
     },
     notes: {
       type: String,
