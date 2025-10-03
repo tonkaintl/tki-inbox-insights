@@ -57,7 +57,7 @@ export default function EmailFolders({ onFolderSelect }: EmailFoldersProps) {
   const [error, setError] = useState<string | null>(null);
   const [graphService, setGraphService] = useState<GraphService | null>(null);
 
-  // Initialize Graph Service
+  // Initialize Graph Service and get access token
   useEffect(() => {
     const initializeGraphService = async () => {
       if (accounts.length > 0) {
