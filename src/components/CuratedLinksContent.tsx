@@ -604,30 +604,37 @@ export default function CuratedLinksContent() {
                       sx={{
                         display: "flex",
                         alignItems: "center",
+                        justifyContent: "space-between",
                         gap: 2,
                         width: "100%",
+                        maxWidth: "100%",
                       }}
                     >
-                      <Typography level="h4">{domain}</Typography>
-                      <Chip size="sm" variant="outlined">
+                      <Typography
+                        level="h4"
+                        sx={{
+                          maxWidth: { xs: "150px", sm: "300px", md: "400px" },
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          flex: 1,
+                        }}
+                      >
+                        {domain}
+                      </Typography>
+                      <Chip size="sm" variant="outlined" sx={{ flexShrink: 0 }}>
                         {links.length} links
                       </Chip>
-                      {/* Show spinner if any link in this domain is loading */}
-                      {links.some((link) => loadingActions[link.id]) && (
-                        <CircularProgress size="sm" />
-                      )}
-                      <Box sx={{ ml: "auto", display: "flex", gap: 1 }}>
-                        <Chip size="sm" color="success" variant="soft">
-                          {links.filter((l) => l.reviewed).length} reviewed
-                        </Chip>
-                        <Chip size="sm" color="warning" variant="soft">
-                          {links.filter((l) => l.flagged).length} flagged
-                        </Chip>
-                      </Box>
                     </Box>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Sheet sx={{ overflow: "auto" }}>
+                    {/* Desktop Table View */}
+                    <Sheet
+                      sx={{
+                        overflow: "auto",
+                        display: { xs: "none", md: "block" },
+                      }}
+                    >
                       <Table>
                         <thead>
                           <tr>
@@ -848,6 +855,220 @@ export default function CuratedLinksContent() {
                         </tbody>
                       </Table>
                     </Sheet>
+
+                    {/* Mobile Card View */}
+                    <Box
+                      sx={{
+                        display: { xs: "block", md: "none" },
+                        gap: 2,
+                      }}
+                    >
+                      {links.map((link) => (
+                        <Card
+                          key={link.id}
+                          variant="outlined"
+                          sx={{ mb: 2, p: 2 }}
+                        >
+                          {/* Header with text and count */}
+                          <Box sx={{ mb: 2 }}>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "flex-start",
+                                mb: 1,
+                              }}
+                            >
+                              <Typography
+                                level="body-sm"
+                                sx={{
+                                  fontWeight: "bold",
+                                  flex: 1,
+                                  mr: 1,
+                                  lineHeight: 1.3,
+                                }}
+                              >
+                                {link.text}
+                              </Typography>
+                              <Chip
+                                size="sm"
+                                variant={link.count > 1 ? "solid" : "soft"}
+                                color={link.count > 1 ? "primary" : "neutral"}
+                              >
+                                {link.count}x
+                              </Chip>
+                            </Box>
+                            {link.count > 1 && (
+                              <Typography
+                                level="body-xs"
+                                sx={{ color: "text.secondary" }}
+                              >
+                                Found in {link.newsletters.length} newsletters
+                              </Typography>
+                            )}
+                          </Box>
+
+                          {/* URLs */}
+                          <Box sx={{ mb: 2 }}>
+                            <Typography
+                              level="body-xs"
+                              sx={{ fontWeight: "bold", mb: 0.5 }}
+                            >
+                              Original URL:
+                            </Typography>
+                            <Link
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 0.5,
+                                mb: 1,
+                                wordBreak: "break-all",
+                              }}
+                            >
+                              <Typography level="body-xs">
+                                {new URL(link.url).hostname}
+                              </Typography>
+                              <Typography level="body-xs">↗</Typography>
+                            </Link>
+
+                            {link.resolved_url &&
+                              link.resolved_url !== link.url && (
+                                <>
+                                  <Typography
+                                    level="body-xs"
+                                    sx={{ fontWeight: "bold", mb: 0.5 }}
+                                  >
+                                    Resolved URL:
+                                  </Typography>
+                                  <Link
+                                    href={link.resolved_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: 0.5,
+                                      wordBreak: "break-all",
+                                    }}
+                                  >
+                                    <Typography level="body-xs">
+                                      {new URL(link.resolved_url).hostname}
+                                    </Typography>
+                                    <Typography level="body-xs">↗</Typography>
+                                  </Link>
+                                </>
+                              )}
+                          </Box>
+
+                          {/* Notes */}
+                          {link.notes && (
+                            <Box sx={{ mb: 2 }}>
+                              <Typography
+                                level="body-xs"
+                                sx={{ fontWeight: "bold", mb: 0.5 }}
+                              >
+                                Notes:
+                              </Typography>
+                              <Typography level="body-xs">
+                                {link.notes}
+                              </Typography>
+                            </Box>
+                          )}
+
+                          {/* Status chips */}
+                          <Box
+                            sx={{
+                              display: "flex",
+                              gap: 1,
+                              flexWrap: "wrap",
+                              mb: 2,
+                            }}
+                          >
+                            {link.reviewed && (
+                              <Chip size="sm" color="success" variant="soft">
+                                Reviewed
+                              </Chip>
+                            )}
+                            {link.flagged && (
+                              <Chip size="sm" color="warning" variant="soft">
+                                Flagged
+                              </Chip>
+                            )}
+                            <Chip size="sm" color="neutral" variant="outlined">
+                              {link.category}
+                            </Chip>
+                          </Box>
+
+                          {/* Action buttons */}
+                          <Box
+                            sx={{
+                              display: "flex",
+                              gap: 1,
+                              justifyContent: "flex-end",
+                            }}
+                          >
+                            <IconButton
+                              size="sm"
+                              variant={link.reviewed ? "solid" : "outlined"}
+                              color={link.reviewed ? "success" : "neutral"}
+                              disabled={loadingActions[link.id]?.reviewed}
+                              onClick={() =>
+                                toggleReviewed(link.id, link.reviewed)
+                              }
+                            >
+                              {loadingActions[link.id]?.reviewed ? (
+                                <CircularProgress size="sm" />
+                              ) : link.reviewed ? (
+                                "✅"
+                              ) : (
+                                "⭕"
+                              )}
+                            </IconButton>
+                            <IconButton
+                              size="sm"
+                              variant={link.flagged ? "solid" : "outlined"}
+                              color={link.flagged ? "warning" : "neutral"}
+                              disabled={loadingActions[link.id]?.flagged}
+                              onClick={() =>
+                                toggleFlagged(link.id, link.flagged)
+                              }
+                            >
+                              {loadingActions[link.id]?.flagged ? (
+                                <CircularProgress size="sm" />
+                              ) : link.flagged ? (
+                                "⭐"
+                              ) : (
+                                "☆"
+                              )}
+                            </IconButton>
+                            <IconButton
+                              size="sm"
+                              variant={link.notes ? "solid" : "outlined"}
+                              color={link.notes ? "primary" : "neutral"}
+                              disabled={loadingActions[link.id]?.notes}
+                              onClick={() => {
+                                setNotesModal({
+                                  open: true,
+                                  linkId: link.id,
+                                  initialNotes: link.notes || "",
+                                });
+                              }}
+                            >
+                              {loadingActions[link.id]?.notes ? (
+                                <CircularProgress size="sm" />
+                              ) : link.notes ? (
+                                "✏️"
+                              ) : (
+                                "📝"
+                              )}
+                            </IconButton>
+                          </Box>
+                        </Card>
+                      ))}
+                    </Box>
                   </AccordionDetails>
                 </Accordion>
               ))}
