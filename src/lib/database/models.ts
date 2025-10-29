@@ -421,6 +421,93 @@ CuratedLinkSchema.index({ flagged: 1 });
 CuratedLinkSchema.index({ first_seen: -1 });
 CuratedLinkSchema.index({ last_seen: -1 });
 
+// Broadcast Item Document Interface
+export interface IBroadcastItem extends Document {
+  id: string;
+  message_id: string; // Unique email Message-ID header
+  subject: string;
+  sender: string;
+  received_date: string;
+  full_text: string;
+  price: string | null;
+  location: string | null;
+  images: string[];
+  parsed_at: Date;
+  raw_html: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+// Broadcast Item Schema
+const BroadcastItemSchema = new Schema<IBroadcastItem>(
+  {
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
+    message_id: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+      trim: true,
+    },
+    subject: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    sender: {
+      type: String,
+      required: true,
+      lowercase: true,
+      trim: true,
+    },
+    received_date: {
+      type: String,
+      required: true,
+    },
+    full_text: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    location: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    images: {
+      type: [String],
+      required: true,
+      default: [],
+    },
+    parsed_at: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+    raw_html: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+  }
+);
+
+// Create indexes for better query performance
+BroadcastItemSchema.index({ sender: 1 });
+BroadcastItemSchema.index({ received_date: -1 });
+BroadcastItemSchema.index({ parsed_at: -1 });
+
 // Export models with snake_case collection names
 export const Email =
   mongoose.models.emails || mongoose.model<IEmail>("emails", EmailSchema);
@@ -439,3 +526,7 @@ export const ResolvedUrl =
 export const CuratedLink =
   mongoose.models.curated_links ||
   mongoose.model<ICuratedLink>("curated_links", CuratedLinkSchema);
+
+export const BroadcastItem =
+  mongoose.models.broadcast_items ||
+  mongoose.model<IBroadcastItem>("broadcast_items", BroadcastItemSchema);

@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
     "@azure/msal-react",
     "@azure/msal-common",
   ],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "files.constantcontact.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

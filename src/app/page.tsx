@@ -68,7 +68,7 @@ function HomeContent() {
               Welcome, {accounts[0].name}!
             </Typography>
             <Box
-              sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 4 }}
+              sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 4, flexWrap: "wrap" }}
             >
               <NextLink href="/results">
                 <Button size="lg">📊 View Results</Button>
@@ -81,6 +81,11 @@ function HomeContent() {
               <NextLink href="/links-enhanced">
                 <Button size="lg" variant="soft" color="success">
                   🔗 Enhanced Links
+                </Button>
+              </NextLink>
+              <NextLink href="/broadcast">
+                <Button size="lg" variant="soft" color="warning">
+                  📡 Broadcast Emails
                 </Button>
               </NextLink>
               <Button variant="outlined" onClick={handleLogout}>
