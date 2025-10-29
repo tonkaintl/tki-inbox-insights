@@ -148,12 +148,15 @@ export class GraphService {
     return response.value;
   }
 
-  async getFullMessage(
-    messageId: string
-  ): Promise<Message & { body: { contentType: string; content: string } }> {
+  async getFullMessage(messageId: string): Promise<
+    Message & {
+      body: { contentType: string; content: string };
+      internetMessageId: string;
+    }
+  > {
     // For single messages, Graph API returns the object directly, not in a value array
     const response = await fetch(
-      `https://graph.microsoft.com/v1.0/me/messages/${messageId}?$select=id,subject,from,receivedDateTime,isRead,body,bodyPreview,webLink`,
+      `https://graph.microsoft.com/v1.0/me/messages/${messageId}?$select=id,subject,from,receivedDateTime,isRead,body,bodyPreview,webLink,internetMessageId`,
       {
         method: "GET",
         headers: {
