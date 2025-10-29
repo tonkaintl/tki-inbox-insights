@@ -8,6 +8,7 @@ import {
   Alert,
   Box,
   Button,
+  Checkbox,
   IconButton,
   Sheet,
   Tooltip,
@@ -27,6 +28,7 @@ interface BroadcastItem {
   price: string | null;
   location: string | null;
   images: string[];
+  completed: boolean;
   parsed_at: string;
 }
 
@@ -71,6 +73,28 @@ export default function BroadcastItemsList() {
       setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const toggleCompleted = async (itemId: string, currentValue: boolean) => {
+    try {
+      const response = await fetch(`/api/broadcast-items/${itemId}/completed`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed: !currentValue }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        // Update local state
+        setItems((prevItems) =>
+          prevItems.map((item) =>
+            item._id === itemId ? { ...item, completed: !currentValue } : item
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Failed to update completed status:", err);
     }
   };
 
@@ -177,9 +201,20 @@ ${item.full_text}`;
                       display: "flex",
                       justifyContent: "space-between",
                       width: "100%",
+                      alignItems: "center",
                     }}
                   >
-                    <Typography level="title-md">{item.subject}</Typography>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Checkbox
+                        checked={item.completed}
+                        onChange={() =>
+                          toggleCompleted(item._id, item.completed)
+                        }
+                        onClick={(e) => e.stopPropagation()}
+                        size="sm"
+                      />
+                      <Typography level="title-md">{item.subject}</Typography>
+                    </Box>
                     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                       {item.price && (
                         <Typography

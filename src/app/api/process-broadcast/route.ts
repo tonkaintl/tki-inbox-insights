@@ -20,13 +20,37 @@ function extractText(html: string): string {
     .replace(/\n+/g, " ") // Remove newlines
     .trim();
 
-  // Split by periods and commas, clean each part
-  const parts = cleaned
-    .split(/[,\n\r]+/)
-    .map((part) => part.trim())
-    .filter((part) => part.length > 0);
+  // Remove common repetitive sections
+  let result = cleaned;
 
-  return parts.join(", ");
+  // Remove header/contact info (before the main content)
+  result = result.replace(
+    /TONKA INTERNATIONAL CORPORATION.*?Email: gary@tonkaintl\.com/gi,
+    ""
+  );
+
+  // Remove footer/unsubscribe info
+  result = result.replace(
+    /TONKA INTERNATIONAL.*?Constant Contact Data Notice/gi,
+    ""
+  );
+
+  // Remove duplicate "Tonka International Corporation" mentions
+  result = result.replace(/Tonka International Corporation.*?US/gi, "");
+
+  // Remove "Unsubscribe | Update Profile" sections
+  result = result.replace(/Unsubscribe.*?Data Notice/gi, "");
+
+  // Remove standalone address lines
+  result = result.replace(
+    /\d+\s+(?:Alma Road|Forest Central Drive).*?(?:TX|Texas)\s+\d{5}/gi,
+    ""
+  );
+
+  // Clean up any remaining multiple spaces
+  result = result.replace(/\s+/g, " ").trim();
+
+  return result;
 }
 
 // Helper function to extract price (finds all prices, returns first full price with thousand separator)

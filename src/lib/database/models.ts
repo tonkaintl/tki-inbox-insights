@@ -432,6 +432,7 @@ export interface IBroadcastItem extends Document {
   price: string | null;
   location: string | null;
   images: string[];
+  completed: boolean;
   parsed_at: Date;
   raw_html: string;
   created_at: Date;
@@ -487,6 +488,12 @@ const BroadcastItemSchema = new Schema<IBroadcastItem>(
       type: [String],
       required: true,
       default: [],
+    },
+    completed: {
+      type: Boolean,
+      required: true,
+      default: false,
+      index: true,
     },
     parsed_at: {
       type: Date,
