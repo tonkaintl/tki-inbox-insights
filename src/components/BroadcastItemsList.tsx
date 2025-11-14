@@ -16,7 +16,7 @@ import {
 } from "@mui/joy";
 import Cookies from "js-cookie";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 interface BroadcastItem {
   _id: string;
@@ -32,13 +32,22 @@ interface BroadcastItem {
   parsed_at: string;
 }
 
-export default function BroadcastItemsList() {
+export interface BroadcastItemsListRef {
+  refresh: () => void;
+}
+
+const BroadcastItemsList = forwardRef<BroadcastItemsListRef>((props, ref) => {
   const [items, setItems] = useState<BroadcastItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [copiedImage, setCopiedImage] = useState<string | null>(null);
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
+
+  // Expose refresh function to parent via ref
+  useImperativeHandle(ref, () => ({
+    refresh: fetchItems,
+  }));
 
   useEffect(() => {
     fetchItems();
@@ -117,13 +126,25 @@ export default function BroadcastItemsList() {
     }
   };
 
-  const formatTextInfo = (item: BroadcastItem) => {
-    return `Subject: ${item.subject}
-Price: ${item.price || "N/A"}
-Location: ${item.location || "N/A"}
-Date: ${new Date(item.received_date).toLocaleDateString()}
+  const downloadImage = async (imageUrl: string, filename: string) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Failed to download image:", err);
+    }
+  };
 
-${item.full_text}`;
+  const formatTextInfo = (item: BroadcastItem) => {
+    return item.full_text;
   };
 
   const groupByDate = (items: BroadcastItem[]) => {
@@ -360,36 +381,61 @@ ${item.full_text}`;
                                 style={{ objectFit: "cover" }}
                                 loading="lazy"
                               />
-                              <Tooltip
-                                title={
-                                  copiedImage === `${item._id}-${idx}`
-                                    ? "Copied!"
-                                    : "Copy link"
-                                }
+                              <Box
+                                sx={{
+                                  position: "absolute",
+                                  top: 4,
+                                  right: 4,
+                                  display: "flex",
+                                  gap: 0.5,
+                                }}
                               >
-                                <IconButton
-                                  size="sm"
-                                  variant="solid"
-                                  sx={{
-                                    position: "absolute",
-                                    top: 4,
-                                    right: 4,
-                                    minWidth: 24,
-                                    minHeight: 24,
-                                  }}
-                                  onClick={() =>
-                                    copyToClipboard(
-                                      imageUrl,
-                                      `${item._id}-${idx}`,
-                                      "image"
-                                    )
+                                <Tooltip
+                                  title={
+                                    copiedImage === `${item._id}-${idx}`
+                                      ? "Copied!"
+                                      : "Copy link"
                                   }
                                 >
-                                  {copiedImage === `${item._id}-${idx}`
-                                    ? "✓"
-                                    : "📋"}
-                                </IconButton>
-                              </Tooltip>
+                                  <IconButton
+                                    size="sm"
+                                    variant="solid"
+                                    sx={{
+                                      minWidth: 24,
+                                      minHeight: 24,
+                                    }}
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        imageUrl,
+                                        `${item._id}-${idx}`,
+                                        "image"
+                                      )
+                                    }
+                                  >
+                                    {copiedImage === `${item._id}-${idx}`
+                                      ? "✓"
+                                      : "📋"}
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Download image">
+                                  <IconButton
+                                    size="sm"
+                                    variant="solid"
+                                    sx={{
+                                      minWidth: 24,
+                                      minHeight: 24,
+                                    }}
+                                    onClick={() =>
+                                      downloadImage(
+                                        imageUrl,
+                                        `vehicle-${item._id}-${idx + 1}.jpg`
+                                      )
+                                    }
+                                  >
+                                    ⬇
+                                  </IconButton>
+                                </Tooltip>
+                              </Box>
                             </Box>
                           ))}
                         </Box>
@@ -404,4 +450,8 @@ ${item.full_text}`;
       </AccordionGroup>
     </Box>
   );
-}
+});
+
+BroadcastItemsList.displayName = "BroadcastItemsList";
+
+export default BroadcastItemsList;

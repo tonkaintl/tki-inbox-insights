@@ -1,14 +1,24 @@
 "use client";
 
-import BroadcastItemsList from "@/components/BroadcastItemsList";
+import BroadcastItemsList, {
+  BroadcastItemsListRef,
+} from "@/components/BroadcastItemsList";
 import ProcessBroadcastButton from "@/components/ProcessBroadcastButton";
 import { Box, Divider, Typography } from "@mui/joy";
+import { useRef } from "react";
 
 export default function BroadcastPage() {
+  const listRef = useRef<BroadcastItemsListRef>(null);
+
   // You'll need to get the actual folder ID - this is a placeholder
   // You can get this from the EmailFolders component when user selects the Broadcasts folder
   const BROADCAST_FOLDER_ID =
     "AQMkADBjNjJjZTU5LWIxZDItNDFmZC04MmI5LTgyYTkzMWRjYWIwYgAuAAADjaD6Y54ilkK6Wdd9FGRmqwEACDyGf8uQckKAY9eP8o6XIgAD-UedjgAAAA==";
+
+  const handleProcessComplete = () => {
+    // Refresh the list when processing completes
+    listRef.current?.refresh();
+  };
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.surface" }}>
@@ -26,11 +36,12 @@ export default function BroadcastPage() {
         <ProcessBroadcastButton
           folderId={BROADCAST_FOLDER_ID}
           folderName="Broadcasts"
+          onProcessComplete={handleProcessComplete}
         />
 
         <Divider sx={{ my: 4 }} />
 
-        <BroadcastItemsList />
+        <BroadcastItemsList ref={listRef} />
       </Box>
     </Box>
   );
