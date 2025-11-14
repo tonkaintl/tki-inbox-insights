@@ -19,11 +19,13 @@ interface BroadcastResult {
 interface ProcessBroadcastButtonProps {
   folderId: string;
   folderName: string;
+  onProcessComplete?: () => void;
 }
 
 export default function ProcessBroadcastButton({
   folderId,
   folderName,
+  onProcessComplete,
 }: ProcessBroadcastButtonProps) {
   const { instance, accounts } = useMsal();
   const [loading, setLoading] = useState(false);
@@ -64,6 +66,10 @@ export default function ProcessBroadcastButton({
 
       if (data.success) {
         setResult(data.data);
+        // Refresh the list after successful processing
+        if (onProcessComplete) {
+          onProcessComplete();
+        }
       } else {
         setError(data.error || data.message);
       }

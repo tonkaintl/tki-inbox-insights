@@ -11,6 +11,12 @@ function extractText(html: string): string {
   // Remove script and style elements
   $("script, style").remove();
 
+  // Replace block-level elements with semicolons to preserve structure
+  $("br").replaceWith("; ");
+  $("div, p, h1, h2, h3, h4, h5, h6, li, tr, td").each((_, el) => {
+    $(el).append("; ");
+  });
+
   // Get all text
   const text = $("body").text() || $.text();
 
@@ -18,6 +24,7 @@ function extractText(html: string): string {
   const cleaned = text
     .replace(/\s+/g, " ") // Multiple spaces to single space
     .replace(/\n+/g, " ") // Remove newlines
+    .replace(/;\s*;+/g, "; ") // Multiple semicolons to single semicolon with space
     .trim();
 
   // Remove common repetitive sections
@@ -47,8 +54,15 @@ function extractText(html: string): string {
     ""
   );
 
-  // Clean up any remaining multiple spaces
-  result = result.replace(/\s+/g, " ").trim();
+  // Clean up any remaining multiple spaces and semicolons
+  result = result
+    .replace(/\s+/g, " ") // Multiple spaces to single space
+    .replace(/;\s*;+/g, "; ") // Multiple semicolons to single semicolon
+    .replace(/;\s+;/g, "; ") // Clean up semicolons with only spaces between
+    .replace(/^[;\s]+/, "") // Remove leading semicolons and spaces
+    .replace(/[;\s]+$/, "") // Remove trailing semicolons and spaces
+    .replace(/;\s*;+/g, "; ") // One more pass for multiple semicolons
+    .trim();
 
   return result;
 }
@@ -69,8 +83,11 @@ function extractPrice(text: string): string | null {
 
 // Helper function to extract location after EXW:
 function extractLocation(text: string): string | null {
-  // Match "EXW: Location" where location is letters/spaces until we hit a number or newline
-  const locationMatch = text.match(/EXW:\s*([A-Za-z\s]+?)(?=\d|$|;|,|\n)/i);
+  // Match "EXW: Location" where location is letters/spaces
+  // Stop at: semicolon, "EXW:", "$", or end of string
+  const locationMatch = text.match(
+    /EXW:\s*([A-Za-z\s]+?)(?=\s*(?:;|EXW:|$|\$))/i
+  );
   if (locationMatch) {
     return locationMatch[1].trim();
   }
