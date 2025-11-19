@@ -6,9 +6,10 @@ export async function GET() {
   try {
     await connectToDatabase();
 
-    // Fetch all broadcast items, sorted by received_date descending (newest first)
+    // Fetch last 50 broadcast items, sorted by received_date descending (newest first)
     const items = await BroadcastItem.find({})
       .sort({ received_date: -1 })
+      .limit(50)
       .lean();
 
     return NextResponse.json({
