@@ -38,6 +38,7 @@ export interface BroadcastItemsListRef {
 
 const BroadcastItemsList = forwardRef<BroadcastItemsListRef>((props, ref) => {
   const [items, setItems] = useState<BroadcastItem[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copiedText, setCopiedText] = useState<string | null>(null);
@@ -75,6 +76,7 @@ const BroadcastItemsList = forwardRef<BroadcastItemsListRef>((props, ref) => {
 
       if (data.success) {
         setItems(data.data);
+        setTotalCount(data.totalCount || data.data.length);
       } else {
         setError(data.error || "Failed to fetch items");
       }
@@ -195,7 +197,7 @@ const BroadcastItemsList = forwardRef<BroadcastItemsListRef>((props, ref) => {
   return (
     <Box sx={{ mt: 4 }}>
       <Typography level="h3" sx={{ mb: 2 }}>
-        📦 Processed Broadcast Items ({items.length})
+        📦 Processed Broadcast Items (Last {items.length} of {totalCount})
       </Typography>
 
       <AccordionGroup>

@@ -6,6 +6,9 @@ export async function GET() {
   try {
     await connectToDatabase();
 
+    // Get total count
+    const totalCount = await BroadcastItem.countDocuments({});
+
     // Fetch last 50 broadcast items, sorted by received_date descending (newest first)
     const items = await BroadcastItem.find({})
       .sort({ received_date: -1 })
@@ -16,6 +19,7 @@ export async function GET() {
       success: true,
       data: items,
       count: items.length,
+      totalCount,
     });
   } catch (error) {
     console.error("Error fetching broadcast items:", error);
