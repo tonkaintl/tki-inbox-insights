@@ -334,14 +334,59 @@ const BroadcastItemsList = forwardRef<BroadcastItemsListRef>((props, ref) => {
                         mb: 2,
                       }}
                     >
+                      <Typography level="body-sm" fontWeight="bold">
+                        Title:
+                      </Typography>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      >
+                        <Typography level="body-sm">{item.subject}</Typography>
+                        <IconButton
+                          size="sm"
+                          variant="plain"
+                          onClick={() =>
+                            copyToClipboard(
+                              item.subject,
+                              `${item._id}-title`,
+                              "text"
+                            )
+                          }
+                          sx={{ minWidth: 24, minHeight: 24 }}
+                        >
+                          {copiedText === `${item._id}-title` ? "✓" : "📋"}
+                        </IconButton>
+                      </Box>
+
                       {item.stock_number && (
                         <>
                           <Typography level="body-sm" fontWeight="bold">
                             Stock #:
                           </Typography>
-                          <Typography level="body-sm">
-                            {item.stock_number}
-                          </Typography>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <Typography level="body-sm">
+                              {item.stock_number}
+                            </Typography>
+                            <IconButton
+                              size="sm"
+                              variant="plain"
+                              onClick={() =>
+                                copyToClipboard(
+                                  item.stock_number!,
+                                  `${item._id}-stock`,
+                                  "text"
+                                )
+                              }
+                              sx={{ minWidth: 24, minHeight: 24 }}
+                            >
+                              {copiedText === `${item._id}-stock` ? "✓" : "📋"}
+                            </IconButton>
+                          </Box>
                         </>
                       )}
 
