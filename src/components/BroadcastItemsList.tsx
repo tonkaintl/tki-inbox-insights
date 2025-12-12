@@ -25,6 +25,9 @@ interface BroadcastItem {
   sender: string;
   received_date: string;
   full_text: string;
+  stock_number: string | null;
+  machine_info: string[];
+  machine_url: string | null;
   price: string | null;
   location: string | null;
   images: string[];
@@ -146,7 +149,30 @@ const BroadcastItemsList = forwardRef<BroadcastItemsListRef>((props, ref) => {
   };
 
   const formatTextInfo = (item: BroadcastItem) => {
-    return item.full_text;
+    const lines = [];
+
+    // Title
+    lines.push(item.subject);
+
+    // Stock number
+    if (item.stock_number) {
+      lines.push(`STK#: ${item.stock_number}`);
+    }
+
+    // Machine info (specs)
+    if (item.machine_info && item.machine_info.length > 0) {
+      item.machine_info.forEach((spec) => lines.push(spec));
+    }
+
+    // Location and price
+    if (item.location && item.price) {
+      lines.push(`EXW: ${item.location} @ ${item.price}`);
+    } else {
+      if (item.location) lines.push(`Location: ${item.location}`);
+      if (item.price) lines.push(`Price: ${item.price}`);
+    }
+
+    return lines.join("\n");
   };
 
   const groupByDate = (items: BroadcastItem[]) => {
@@ -239,6 +265,14 @@ const BroadcastItemsList = forwardRef<BroadcastItemsListRef>((props, ref) => {
                       <Typography level="title-md">{item.subject}</Typography>
                     </Box>
                     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                      {item.stock_number && (
+                        <Typography
+                          level="body-sm"
+                          sx={{ color: "primary.plainColor" }}
+                        >
+                          STK# {item.stock_number}
+                        </Typography>
+                      )}
                       {item.price && (
                         <Typography
                           level="body-sm"
@@ -300,6 +334,17 @@ const BroadcastItemsList = forwardRef<BroadcastItemsListRef>((props, ref) => {
                         mb: 2,
                       }}
                     >
+                      {item.stock_number && (
+                        <>
+                          <Typography level="body-sm" fontWeight="bold">
+                            Stock #:
+                          </Typography>
+                          <Typography level="body-sm">
+                            {item.stock_number}
+                          </Typography>
+                        </>
+                      )}
+
                       <Typography level="body-sm" fontWeight="bold">
                         Price:
                       </Typography>
@@ -313,6 +358,27 @@ const BroadcastItemsList = forwardRef<BroadcastItemsListRef>((props, ref) => {
                       <Typography level="body-sm">
                         {item.location || "Not found"}
                       </Typography>
+
+                      {item.machine_url && (
+                        <>
+                          <Typography level="body-sm" fontWeight="bold">
+                            Listing:
+                          </Typography>
+                          <Typography level="body-sm">
+                            <a
+                              href={item.machine_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                color: "inherit",
+                                textDecoration: "underline",
+                              }}
+                            >
+                              View on tonkaintl.com
+                            </a>
+                          </Typography>
+                        </>
+                      )}
 
                       <Typography level="body-sm" fontWeight="bold">
                         Images:
@@ -329,24 +395,34 @@ const BroadcastItemsList = forwardRef<BroadcastItemsListRef>((props, ref) => {
                       </Typography>
                     </Box>
 
-                    {/* Full Text */}
-                    <Sheet
-                      variant="soft"
-                      sx={{
-                        p: 2,
-                        mb: 2,
-                        borderRadius: "sm",
-                        maxHeight: 150,
-                        overflow: "auto",
-                      }}
-                    >
-                      <Typography
-                        level="body-sm"
-                        sx={{ whiteSpace: "pre-wrap" }}
+                    {/* Machine Specs */}
+                    {item.machine_info && item.machine_info.length > 0 && (
+                      <Sheet
+                        variant="soft"
+                        sx={{
+                          p: 2,
+                          mb: 2,
+                          borderRadius: "sm",
+                        }}
                       >
-                        {item.full_text}
-                      </Typography>
-                    </Sheet>
+                        <Typography level="title-sm" sx={{ mb: 1 }}>
+                          Machine Specifications:
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.5,
+                          }}
+                        >
+                          {item.machine_info.map((spec, idx) => (
+                            <Typography key={idx} level="body-sm">
+                              • {spec}
+                            </Typography>
+                          ))}
+                        </Box>
+                      </Sheet>
+                    )}
 
                     {/* Images */}
                     {item.images.length > 0 && (

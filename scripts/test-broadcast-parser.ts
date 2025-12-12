@@ -1,8 +1,11 @@
-import { BroadcastItem } from "@/lib/database/models";
-import connectToDatabase from "@/lib/database/mongoose";
-import { GraphService } from "@/lib/services/graphService";
+/**
+ * Test script for broadcast parser
+ * This reads the example .eml file and tests the parsing functions
+ */
+
 import * as cheerio from "cheerio";
-import { NextRequest, NextResponse } from "next/server";
+import * as fs from "fs";
+import * as path from "path";
 
 // Helper function to extract text and clean it
 function extractText(html: string): string {
@@ -23,8 +26,8 @@ function extractText(html: string): string {
   $("a").each((i, el) => {
     const href = $(el).attr("href");
     const text = $(el).text().trim();
-    if (href && href.includes("tonkaintl.com") && !href.includes("mailto")) {
-      console.log(`   [${i}] ${text}: ${href}`);
+    if (href) {
+      console.log(`   [${i}] ${text}: ${href.substring(0, 120)}...`);
     }
   });
 
@@ -314,207 +317,105 @@ function extractImages(html: string): string[] {
   return images;
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    console.log("🚀 Broadcast endpoint called");
+// Main test function
+async function testParser() {
+  const emlPath = path.join(
+    __dirname,
+    "..",
+    "test-data",
+    "2007 KW T800 Tandem Axle Day Cab.eml"
+  );
 
-    const {
-      folderId,
-      folderName,
-      accessToken,
-      batchSize = 10,
-    } = await request.json();
-    console.log(
-      `📁 Folder: ${folderName}, ID: ${folderId?.substring(0, 20)}...`
-    );
-    console.log(`📦 Batch size: ${batchSize}`);
+  console.log("📧 Reading test email file...");
+  console.log(`   Path: ${emlPath}`);
 
-    if (!accessToken) {
-      console.log("❌ No access token");
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Access token is required",
-        },
-        { status: 401 }
-      );
-    }
+  const emlContent = fs.readFileSync(emlPath, "utf-8");
 
-    if (!folderId || !folderName) {
-      console.log("❌ Missing folder info");
-      return NextResponse.json(
-        {
-          success: false,
-          error: "folderId and folderName are required",
-        },
-        { status: 400 }
-      );
-    }
+  // Extract HTML content from .eml file (it's after the Content-Type: text/html line)
+  // First, let's find where the HTML part starts
+  const htmlStartMatch = emlContent.match(
+    /Content-Type: text\/html[\s\S]*?Content-Transfer-Encoding: quoted-printable\r?\n\r?\n/i
+  );
 
-    // Initialize Graph service with access token
-    console.log("📧 Initializing Graph service...");
-    const graphService = new GraphService(accessToken);
+  if (!htmlStartMatch) {
+    console.error("❌ Could not find HTML content start in .eml file");
+    console.log("\n📄 File preview (first 2000 chars):");
+    console.log(emlContent.substring(0, 2000));
+    return;
+  }
 
-    // Connect to database
-    console.log("🔌 Connecting to database...");
-    await connectToDatabase();
-    console.log("✅ Database connected");
+  const htmlStartIndex = htmlStartMatch.index! + htmlStartMatch[0].length;
+  const htmlEndMatch = emlContent
+    .substring(htmlStartIndex)
+    .match(/------=_Part/);
+  const htmlEndIndex = htmlEndMatch
+    ? htmlStartIndex + htmlEndMatch.index!
+    : emlContent.length;
 
-    // Get last N emails from the folder based on batchSize
-    console.log(`📬 Fetching last ${batchSize} messages...`);
-    const messages = await graphService.getMessages(folderId, batchSize);
-    console.log(`✅ Retrieved ${messages.length} messages`);
-    console.log("\n📋 PROCESSING BROADCAST EMAILS:");
-    console.log("================");
+  let htmlContent = emlContent.substring(htmlStartIndex, htmlEndIndex);
 
-    const processedItems = [];
-    let skippedCount = 0;
+  // Decode quoted-printable encoding
+  htmlContent = htmlContent
+    .replace(/=\r?\n/g, "") // Remove soft line breaks
+    .replace(/=([0-9A-F]{2})/gi, (_, hex) =>
+      String.fromCharCode(parseInt(hex, 16))
+    ); // Decode =XX
 
-    // Process each email
-    for (let i = 0; i < messages.length; i++) {
-      const email = messages[i];
-      console.log(
-        `\n📧 Processing ${i + 1}/${messages.length}: "${email.subject}"`
-      );
-      console.log(`   From: ${email.from.emailAddress.address}`);
+  console.log(`✅ Extracted HTML (${htmlContent.length} chars)`);
+  console.log(
+    "\n" + "=".repeat(80) + "\n🧪 TESTING PARSER FUNCTIONS\n" + "=".repeat(80)
+  );
 
-      try {
-        // Get full email content
-        console.log(`   ⏳ Fetching full email...`);
-        const fullEmail = await graphService.getFullMessage(email.id);
-        const htmlContent = fullEmail.body?.content || "";
-        const messageId = fullEmail.internetMessageId;
-        console.log(`   ✅ Got HTML (${htmlContent.length} chars)`);
-        console.log(`   🔑 Message-ID: ${messageId}`);
+  // Test all extraction functions
+  const fullText = extractText(htmlContent);
+  const stockNumber = extractStockNumber(htmlContent, fullText);
+  const machineInfo = extractMachineInfo(htmlContent);
+  const machineUrl = extractMachineUrl(htmlContent);
+  const price = extractPrice(htmlContent, fullText);
+  const location = extractLocation(htmlContent, fullText);
+  const images = extractImages(htmlContent);
 
-        // Check if this message was already processed
-        console.log(`   🔍 Checking if already processed...`);
-        const existingItem = await BroadcastItem.findOne({
-          message_id: messageId,
-        });
-        if (existingItem) {
-          console.log(`   ⏭️  SKIPPED - Already processed`);
-          skippedCount++;
-          continue;
-        }
-
-        // Extract data
-        console.log(`   🔍 Extracting data...`);
-        const fullText = extractText(htmlContent);
-        const stockNumber = extractStockNumber(htmlContent, fullText);
-        const machineInfo = extractMachineInfo(htmlContent);
-        console.log(`   🔍 machineInfo type: ${typeof machineInfo}, isArray: ${Array.isArray(machineInfo)}, length: ${machineInfo?.length}`);
-        const machineUrl = extractMachineUrl(htmlContent);
-        const price = extractPrice(htmlContent, fullText);
-        const location = extractLocation(htmlContent, fullText);
-        const images = extractImages(htmlContent);
-
-        console.log("\n📊 EXTRACTION RESULTS:");
-        console.log(`   📝 Subject: ${email.subject}`);
-        console.log(`   🔢 Stock#: ${stockNumber || "NOT FOUND"}`);
-        console.log(`   🔧 Machine Info (${machineInfo.length} specs):`);
-        machineInfo.forEach((spec, idx) =>
-          console.log(`      ${idx + 1}. ${spec}`)
-        );
-        console.log(`   🔗 Machine URL: ${machineUrl || "NOT FOUND"}`);
-        console.log(`   💰 Price: ${price || "NOT FOUND"}`);
-        console.log(`   📍 Location: ${location || "NOT FOUND"}`);
-        console.log(`   🖼️  Images: ${images.length} found`);
-        console.log(`   📄 Full text length: ${fullText.length} chars`);
-        console.log(
-          `   ✅ Extracted: ${fullText.length} chars text, ${images.length} images`
-        );
-
-        // Create broadcast item (DON'T store raw_html to save memory!)
-        const broadcastItem = {
-          id: email.id,
-          message_id: messageId,
-          subject: email.subject,
-          sender: email.from.emailAddress.address,
-          received_date: email.receivedDateTime,
-          full_text: fullText.substring(0, 5000), // Limit to 5000 chars max
-          stock_number: stockNumber || null,
-          machine_info: Array.isArray(machineInfo) ? machineInfo : [],
-          machine_url: machineUrl || null,
-          price: price || null,
-          location: location || null,
-          images: Array.isArray(images) ? images : [],
-          parsed_at: new Date(),
-          raw_html: "", // Don't store full HTML - too large!
-        };
-        
-        console.log(`   📋 broadcastItem.machine_info:`, broadcastItem.machine_info);
-
-        // Save to database
-        console.log(`   💾 Saving to database...`);
-        console.log(`   📦 Data being saved:`, JSON.stringify({
-          stock_number: stockNumber,
-          machine_info: machineInfo,
-          machine_url: machineUrl,
-          price,
-          location,
-          images_count: images.length
-        }, null, 2));
-        
-        const savedItem = await BroadcastItem.findOneAndUpdate(
-          { message_id: messageId },
-          broadcastItem,
-          {
-            upsert: true,
-            new: true,
-          }
-        );
-
-        console.log(`   ✅ Saved to database`);
-        console.log(`   ✓ Verified machine_info in DB:`, savedItem.machine_info);
-
-        processedItems.push({
-          subject: email.subject,
-          stockNumber,
-          machineUrl,
-          machineInfoCount: machineInfo.length,
-          price,
-          location,
-          imageCount: images.length,
-          textLength: fullText.length,
-        });
-      } catch (err) {
-        console.error(`   ❌ Error processing email: ${err}`);
-      }
-    }
-
-    console.log("\n================");
-    console.log(
-      `✅ Processed ${processedItems.length} new emails, skipped ${skippedCount} already processed`
-    );
-    console.log("\n📊 SUMMARY:");
-    processedItems.forEach((item, idx) => {
-      console.log(`\n${idx + 1}. ${item.subject}`);
-      console.log(`   Stock#: ${item.stockNumber || "N/A"}`);
-      console.log(`   Machine Info: ${item.machineInfoCount} specs`);
-      console.log(`   URL: ${item.machineUrl || "N/A"}`);
-      console.log(`   Price: ${item.price || "N/A"}`);
-      console.log(`   Location: ${item.location || "N/A"}`);
-      console.log(`   Images: ${item.imageCount}`);
-    });
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        count: processedItems.length,
-        skipped: skippedCount,
-        items: processedItems,
-        message: `Processed ${processedItems.length} new emails, skipped ${skippedCount} already processed.`,
-      },
-    });
-  } catch (error) {
-    console.error("❌ Error processing broadcast folder:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
+  console.log(
+    "\n" + "=".repeat(80) + "\n📊 FINAL EXTRACTION RESULTS\n" + "=".repeat(80)
+  );
+  console.log(`\n📝 Subject: 2007 KW T800 Tandem Axle Day Cab`);
+  console.log(`🔢 Stock#: ${stockNumber || "❌ NOT FOUND"}`);
+  console.log(`\n🔧 Machine Info (${machineInfo.length} specs):`);
+  if (machineInfo.length === 0) {
+    console.log("   ❌ NO SPECS FOUND");
+  } else {
+    machineInfo.forEach((spec, idx) => console.log(`   ${idx + 1}. ${spec}`));
+  }
+  console.log(`\n🔗 Machine URL: ${machineUrl || "❌ NOT FOUND"}`);
+  console.log(`💰 Price: ${price || "❌ NOT FOUND"}`);
+  console.log(`📍 Location: ${location || "❌ NOT FOUND"}`);
+  console.log(`🖼️  Images: ${images.length} found`);
+  if (images.length > 0) {
+    images.forEach((img, idx) =>
+      console.log(`   ${idx + 1}. ${img.substring(0, 100)}...`)
     );
   }
+  console.log(`\n📄 Full text (first 500 chars):`);
+  console.log(`   ${fullText.substring(0, 500)}...`);
+
+  console.log(
+    "\n" + "=".repeat(80) + "\n✅ Expected Values (from user requirements):\n"
+  );
+  console.log(`   Title: "2007 KW T800 Tandem Axle Day Cab"`);
+  console.log(`   Stock#: "855161000"`);
+  console.log(`   Machine Info:`);
+  console.log(`      - Cummins ISX Engine`);
+  console.log(`      - Manual Transmission`);
+  console.log(`      - 826,455 Miles`);
+  console.log(`      - No Issues / No Codes`);
+  console.log(`   Location: "Wisconsin"`);
+  console.log(`   Price: "$10,000"`);
+  console.log(
+    `   URL: "https://www.tonkaintl.com/inventory/855161000/2007-kw-t800-tadc/"`
+  );
+  console.log(`   Image: Should have at least 1 vehicle image`);
+  console.log("=".repeat(80) + "\n");
 }
+
+// Run the test
+testParser().catch(console.error);

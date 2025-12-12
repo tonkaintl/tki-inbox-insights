@@ -1,0 +1,835 @@
+Received: from DS4PR02MB10819.namprd02.prod.outlook.com (2603:10b6:8:29d::20)
+ by SN6PR02MB4717.namprd02.prod.outlook.com with HTTPS; Fri, 12 Dec 2025
+ 20:23:41 +0000
+Received: from SJ0PR05CA0182.namprd05.prod.outlook.com (2603:10b6:a03:330::7)
+ by DS4PR02MB10819.namprd02.prod.outlook.com (2603:10b6:8:29d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9412.9; Fri, 12 Dec
+ 2025 20:23:37 +0000
+Received: from CO1PEPF000044F8.namprd21.prod.outlook.com
+ (2603:10b6:a03:330:cafe::45) by SJ0PR05CA0182.outlook.office365.com
+ (2603:10b6:a03:330::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.5 via Frontend Transport; Fri,
+ 12 Dec 2025 20:23:36 +0000
+Authentication-Results: spf=pass (sender IP is 208.75.123.177)
+ smtp.mailfrom=in.constantcontact.com; dkim=pass (signature was verified)
+ header.d=shared1.ccsend.com;dkim=pass (signature was verified)
+ header.d=auth.ccsend.com;dmarc=pass action=none
+ header.from=shared1.ccsend.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of in.constantcontact.com
+ designates 208.75.123.177 as permitted sender)
+ receiver=protection.outlook.com; client-ip=208.75.123.177;
+ helo=ccm177.constantcontact.com; pr=C
+Received: from ccm177.constantcontact.com (208.75.123.177) by
+ CO1PEPF000044F8.mail.protection.outlook.com (10.167.241.198) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.0
+ via Frontend Transport; Fri, 12 Dec 2025 20:23:36 +0000
+DKIM-Signature: v=1; q=dns/txt; a=rsa-sha256; c=relaxed/relaxed; s=12042023; d=shared1.ccsend.com; h=date:mime-version:subject:X-Feedback-ID:X-250ok-CID:message-id:from:reply-to:list-unsubscribe:list-unsubscribe-post:to; bh=wnd5bYUMZ8C1Oy9AGKkxgoHVVVud0Mse+m4aeK1nDAE=; b=aG6nkL1Rq0TyxMlKprv4wgk8vXJkQtB7wcb24L5gC7e19dqvkD8nLkDX68WK2cXZHTHt0huA5mptBHqel+m8bUb0n3cdi5n7NtafyXg19m/ygFl+woQW2sCNpgCIhUWZjrilkuhcwdsoHaiq5UNtqU0CibHkeYzkgTPkjpvdfSxDaIiHExxO84DDCwuiSpqrzo4peNB1SnJw6Vo2KBNkbX3o902jzNKyj7jyWsEDsxgIZQtRCZDQIxMzSMZY4XRyQ6dAJej4o3ua3agtNX7HEjnkXOYeKJu1Kowa6TYQdh5utS7pcXLIL3/eQ18n7x87rG001pVK8uzaZdOLHsfpJQ==
+DKIM-Signature: v=1; q=dns/txt; a=rsa-sha256; c=relaxed/relaxed; s=1000073432; d=auth.ccsend.com; h=date:mime-version:subject:X-Feedback-ID:X-250ok-CID:message-id:from:reply-to:list-unsubscribe:list-unsubscribe-post:to; bh=wnd5bYUMZ8C1Oy9AGKkxgoHVVVud0Mse+m4aeK1nDAE=; b=gDy21WyRSAZeDkcBlNY8S1aX2EmedmVnbB+hnJFgezuaMfxd/Ti16UWJhk+y1nOpOIKmoolsY61NEA55DvEaDTl2SiSGT2SEvz0C5APG7Qr6N+ZbcomJejnc6DvVKxADeaWKOzQkSg/8K1kA5EaQTaZWps8ndi46aYhixA9iamk=
+Message-ID: <1142290352189.1119543439244.1687785179.0.411520JL.2002@synd.ccsend.com>
+Date: Fri, 12 Dec 2025 15:23:35 -0500 (EST)
+From: Lyn Warren/Gary Childs <lyn-tonkaintl.com@shared1.ccsend.com>
+Reply-To: lyn@tonkaintl.com
+To: stephen@tonkaintl.com
+Subject: 2007 KW T800 Tandem Axle Day Cab
+Content-Type: multipart/alternative;
+	boundary="----=_Part_16377232_1258644943.1765571015492"
+List-Unsubscribe: <https://visitor.constantcontact.com/do?p=un&m=001qKqk59bsnkF1JfitQEgnPw%3D%3D&se=001T70mfzg1cLLgHBFDr0zOiw%3D%3D&t=001EkZLEx15CcE%3D&llr=m7l94usab>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+X-Campaign-Activity-ID: 6e7feed4-682f-407b-bc92-b1dd8eccc637
+X-250ok-CID: 6e7feed4-682f-407b-bc92-b1dd8eccc637
+X-Channel-ID: 6f2b119c-3ed3-11ea-84c7-d4ae5275b546
+X-Return-Path-Hint: Abn/u1GgvQHu8krHdjszGNw==_1119543439244_bysRnD7TEeqEx9SuUnW1Rg==@in.constantcontact.com
+X-Roving-Campaignid: 1142290352189
+X-Roving-Id: 1119543439244.1687785179
+X-Feedback-ID: 6f2b119c-3ed3-11ea-84c7-d4ae5275b546:6e7feed4-682f-407b-bc92-b1dd8eccc637:1119543439244:CTCT
+X-CTCT-ID: 6edd1622-3ed3-11ea-84c7-d4ae5275b546
+Return-Path: Abn/u1GgvQHu8krHdjszGNw==_1119543439244_bysRnD7TEeqEx9SuUnW1Rg==@in.constantcontact.com
+X-MS-Exchange-Organization-ExpirationStartTime: 12 Dec 2025 20:23:36.5936
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id: d733d3b3-465d-4d76-2956-08de39bc5468
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 8ba61885-7069-455f-9471-afcd5c90d10d:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044F8:EE_|DS4PR02MB10819:EE_|SN6PR02MB4717:EE_
+X-MS-Exchange-Organization-AuthSource: CO1PEPF000044F8.namprd21.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Office365-Filtering-Correlation-Id: d733d3b3-465d-4d76-2956-08de39bc5468
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-MS-Exchange-Organization-SCL: -1
+X-Microsoft-Antispam: BCL:3;ARA:13230040|3072899012|2092899012|4022899009|69100299015|29132699027|1032899013|12012899012|2066899003|8096899003|13003099007|9112999003|4122999003;
+X-Forefront-Antispam-Report: CIP:208.75.123.177;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SFE;H:ccm177.constantcontact.com;PTR:ccm177.constantcontact.com;CAT:NONE;SFS:(13230040)(3072899012)(2092899012)(4022899009)(69100299015)(29132699027)(1032899013)(12012899012)(2066899003)(8096899003)(13003099007)(9112999003)(4122999003);DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2025 20:23:36.2744
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d733d3b3-465d-4d76-2956-08de39bc5468
+X-MS-Exchange-CrossTenant-Id: 8ba61885-7069-455f-9471-afcd5c90d10d
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044F8.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PR02MB10819
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:05.5837059
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.9412.000
+X-Microsoft-Antispam-Mailbox-Delivery:
+	wl:1;pcwl:1;ucf:0;jmr:0;auth:0;dest:I;ENG:(910005)(944490095)(944506478)(944626604)(920097)(811242)(255002)(410001)(930201)(140003)(1310096);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VHZiNWw1c1RoeUtoRTFpMlNMYUN0MzE0Z2hROTZCa3Rvd2tBTExiTEpycFRh?=
+ =?utf-8?B?NWtOVkQ1TTZrVTVYRkJEZEJQeFVzMWpXUFFlR1VjRUlLbGsyTEVaTk8yNGNx?=
+ =?utf-8?B?Vms2dmEzbXRMY0JBc0x6elhWRnlpbXo4Y0Q0bXB1cE1rbHMvMWMvQm9ZQ2Ns?=
+ =?utf-8?B?aWpZcXBsVWh2UmFGTmVTeElpblhORkxycitVRTcvYlVXQkNZZkVXNFZuMWNl?=
+ =?utf-8?B?eDRPQ0Q3MEY0eHgrUUVqcTQ0ME9tZU0xSm85UVFXZldyWEhzYy9NeDEzRFd4?=
+ =?utf-8?B?OGxOMkdaMUt6VjhOTUZJWEU3NEZxNkliM3dySjZhZ3FuVmdGTmx2MGx1cXla?=
+ =?utf-8?B?OE1GWks3QytPL2RCdjlXLzVOeEEzK0wvZWhjWXpPVG44YytZWVRYV1B4N2wv?=
+ =?utf-8?B?cUhEcWdqaHdNRlJsN0RVb2M2c2NTd1czN1RILzVZMkZzMzl1Z1k4MXY1VWxs?=
+ =?utf-8?B?amhOR00xWWcwNGR5dDlGTU02Q3BBMXRZNVlOTlM3anpxRzR6Z3hsNkE1d3Ra?=
+ =?utf-8?B?N1FCaUU5M25YTjNPVUd3MlJhVkpwaUhqWWhRVkljanBpcmZSSWJXOHNSSGkr?=
+ =?utf-8?B?ZFd3RmlwY0dxbDZRQ3d1YjhVV0JPN2xGdGIrTEQyM042eVRMSTRYL3Vac0Er?=
+ =?utf-8?B?VFE0djlldFFEekMrV243VzFPbWRNN01RSWpOZTczM3IweG4zdzdzbEErb1cy?=
+ =?utf-8?B?SXF3aVNValhSWjlCWGdoWVZsV09TNjlrQ1RWV3dZQ1cyaGNCUlB4RkhSYTJm?=
+ =?utf-8?B?QVVtWkxXdDA1Rm9kVkN4Nmg4RTMrQWRJYjA1OG9iR1hCT21Ha2JHQ2s2d0Rh?=
+ =?utf-8?B?elJvb0FxT0RXNDF2WGxsQmNNejhDd2czVkZSUFpVNzFabE1QMEREbHpweUo2?=
+ =?utf-8?B?ekI2Y0E1OXZSVDh6b0xwWXQxcWVuOXZTRFFmSXlGZEQ4L1B1a3dkTndIbjFC?=
+ =?utf-8?B?cGE2MFJRWEgyTEhRWHdzcXI3K2xqdkptY0FhVFlEL0Rtc0tUSFJkdWpLbkk4?=
+ =?utf-8?B?eldLU0lEUWZQNmFNeWc0SzloazlTYVA2MEJpMU9GUU1xYUlZUlVmL2xwT3BD?=
+ =?utf-8?B?d0x4TDBkZVpsZU9Fa2o4WXJHSnVkclBUVE5EV0ttU2RiV0tJdjVTQzIvRTVu?=
+ =?utf-8?B?TTEwYjlHMHhjOXh1bFg5M2g3bk9Cd0diNzhHM3ByNDR4dWNKMGtBdEdTNDV4?=
+ =?utf-8?B?UnloUGF0Vy9xTFpCZmJBQ2V0V0I5UXMvaXR6Ky9CL1EwNHpKeUxCTGEvWVoz?=
+ =?utf-8?B?b3cxL1VURmhkMXBPVjFQaVd6NnRwQjByMzIyQTgzdzRJRThLOVdVc21oa2c1?=
+ =?utf-8?B?L1VRM0NsTUYvdTVBN21ReWw4WUNyaHc4NFMyekVRYWZwR2kzT2svNUM0aWdW?=
+ =?utf-8?B?MU93VVg1VzJZL1h6dE05QnNob0dJZGxsaUxvaDdKQ1RuUWpkbE5vV0Y0N0Uv?=
+ =?utf-8?B?QW40MVYvYXR2YkR5WFlqb1FCWE81WFI3UHE5QTl2SmJreGt2WGl0NzZaaThE?=
+ =?utf-8?B?WVo4RnFDeVgwaDdrWXRjNUNsNVFKOEdKcUZKNHV2R3Z6U2g2Rythb1lHOGRH?=
+ =?utf-8?B?MHowVzk3MTBKbG5Ib0dTa0Nkekt6MFI4VUlqa1NwWWZoNGh3ZlFTRmFwUi93?=
+ =?utf-8?B?T0xWdVVQamVQUFhqek9uS0xNSVZaQ1lwL0kzRmpBeDIyVE9ZZ0VTbVNjQm80?=
+ =?utf-8?B?YjBvTmpyR0J0bXM1Q3FCU25TUzVZYnAzVjVyR3F2U1FnTEJMcEZ4ZXRVcEdz?=
+ =?utf-8?B?OTBSaDl4VndaQlJobWk0NGIzWmQ5UjdaeWpaTHVvQXBIU3E2WnVacnJ3bTNn?=
+ =?utf-8?B?bVFnVWwzUyt2ek5wNVJVaDh0RjNPRjBMaVBtbGpMWVAwamIxUDZ4UXlkYVBG?=
+ =?utf-8?B?R21oZVNIYWo3SHdoYjlSWHRNWElTc09kc0hoaXQxdm9MQVBRNklDaVJONTNY?=
+ =?utf-8?B?SnV0dTRrTFdtd1ZDZFh0SjUrUHNGbG03NXo3b2V6NzhNdkxBNDRucGlTcFJK?=
+ =?utf-8?B?VU5nWk9JNHJBR0V0dkNUQXo1bmpxVGhGdUdCcnd3eHJFTkdFb2E0T2NuTjln?=
+ =?utf-8?B?MEUvU3h5WjUxdndCNnlZVW43TUFYNTZnMDMxMW9uckhIYzZNQjJxSno1a0g5?=
+ =?utf-8?B?TjRSZXNvT3dSZnBXZ2cwbFo5c3djNkp4dm1MUUx5Tk9lc0V0ajdPTUdZTW80?=
+ =?utf-8?B?cmljcXNhUjhkK29tT1dYb0tZVEJmNkd1S1liRUtPU1pRT3JjK1NTdWdsTGtW?=
+ =?utf-8?B?ZTd5YlNLMm9IblpreFZpZUJWemxYWTkzcTZidjVodUxSeVEzQ1ZUWThVUjBG?=
+ =?utf-8?B?TlVaTmFxTnpiVGRCaTlCZXk1N09UVWFqVy9JSjl0MllqQ3EwNGJmQ1cwNlQx?=
+ =?utf-8?B?cnZMTkRXZjRrMkh5dU9JRXdod25wZDhySDRvZzFjRmR3Z3JIMjYvbitrQVpY?=
+ =?utf-8?B?dEljOFZ2bU0rNFU0RDNoZUNLeUxTWThmU2JGbXhFTHlKN2NhVHdZUDFWTTBu?=
+ =?utf-8?B?NEdtL1N0SThmTDRSa1o0Zm1MS3pPUmF4ZU8yTDMzcE5TRFFmcGJheHJZUzFF?=
+ =?utf-8?B?UUxFNGUrYmcwR3lZa2RvRzJFWGVMNmlXRjJyZ1FzYnljSmYwNUgvNUlOQ1R4?=
+ =?utf-8?B?NEt3YzNWTUhXbTQwdUdOUHZTaFJnOUZRUzd3L2J1SGoxbFpnU3NxWk83Y1BH?=
+ =?utf-8?B?b1crRWtSWVJIaGpaMU1CMDVTeDBYcFo1L1NFelZWVExhdmFTZ1JuTEttNEJr?=
+ =?utf-8?B?cy91WFk1b0xGQUlHY3dPT0JXMGNkYUhMVUpCTHhoUWdTTVBtQkxFeHQ4Q2Rx?=
+ =?utf-8?B?RW00czB6RzBTZUY0eXVwdFNPaFQ0ZDQzMVE0R1loTDJYbU9jMTV6S2ZvaDhM?=
+ =?utf-8?B?QVlRQ0FXS29TKzZhRTNwcmZNaGw5NW4zbE1EUnAzTjhXazRoUGVIVGk0V3Mr?=
+ =?utf-8?B?djkzU29MQ1JtQ3JrSUpjWW5ibWpWVk9FYzl1U294emlXMmZ1QVdKeXFxYmtV?=
+ =?utf-8?B?REtKTzROYUJTQ0VpT2ZHczB1bVhLUVk0ODRqWlJvZmpFRlRJbXBuM2tkdEo5?=
+ =?utf-8?B?R2grUCtlRjFHT3NsUG5Oayt1UlExQ2Jqenh2WmpwS2dVSFRMcmppOG8zbklE?=
+ =?utf-8?B?eHhqVTROTWJNc1VpZjJjSy9lQmRMbTl3d2xrOENSd1QvdnZzdllNN29HbXlw?=
+ =?utf-8?B?Rm9GNHhrM1BoeFJSSWNTWWx2bG1tdmo4VGRkdnp3VXhCOTV2Y3d4Zm14N2lX?=
+ =?utf-8?B?cjlxUFVJNW81Q00xbWRsWktmYTAyN2U5UUJFOVdMOEhGNnJHMWloT1VUb3Vl?=
+ =?utf-8?B?OXp4dUF4NHhyVkJDNWI0ZjFpdy9xdlUvV0QrbWNRN0RBNHFGUkh2NEMydDVJ?=
+ =?utf-8?Q?JESj8xThfZVcHfil/EIQ7?=
+MIME-Version: 1.0
+
+------=_Part_16377232_1258644943.1765571015492
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Email from Tonka International Corporation =EF=BB=BFTONKA INTERNATIONAL COR=
+PORATION 1700 Alma Dr, Suite 242, Plano, Texas 75075 www.tonkaintl.com 2007=
+ KW T800 Tandem Axle Day Cab STK#: 855161000 Cummins ISX Engine Manual Tran=
+smission 826,455 Miles No Issues / No Codes EXW: Wisconsin @ $10,000 More I=
+mages https://www.tonkaintl.com/inventory/855161000/2007-kw-t800-tadc/ Lyn =
+Warren (214) 837-5061 lyn@tonkaintl.com Gary Childs (702) 232-0321 gary@ton=
+kaintl.com Tonka International The Right Call, For Every Deal Tonka Interna=
+tional is a licensed and bonded wholesale dealer based in Plano, Texas, ser=
+ving companies across the U.S. and internationally since 2013. We specializ=
+e in helping companies sell heavy equipment=E2=80=94trucks, trailers, marin=
+e gear, construction machinery, and more. SELL YOUR MACHINE RECENTLY SOLD A=
+VAILABLE MACHINES FAQ       Tonka International Corporation | 1700 Alma Dri=
+ve Suite 242 | Plano, TX 75075 US Unsubscribe | Update Profile | Constant C=
+ontact Data Notice
+------=_Part_16377232_1258644943.1765571015492
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML><html lang=3D"en-US"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>Email from Tonka International Corporation</title>  <meta name=3D"view=
+port" content=3D"width=3Ddevice-width, initial-scale=3D1, maximum-scale=3D1=
+">   <style type=3D"text/css" data-premailer=3D"ignore">=20
+/* The following 2 styles are for handling signup landing pages  /* Set the=
+ default value for the targeted layout to display: none */ .layout--email_s=
+ignup_fineprint { display: none; }  /* Display the targeted layout only if =
+the doc contains email_address input */ body:has(label[for=3D"email_address=
+"]) .layout--email_signup_fineprint { display: block; }
+@media only screen and (max-width:480px) { .footer-main-width { width: 100%=
+ !important; }  .footer-mobile-hidden { display: none !important; }  .foote=
+r-mobile-hidden { display: none !important; }  .footer-column { display: bl=
+ock !important; }  .footer-mobile-stack { display: block !important; }  .fo=
+oter-mobile-stack-padding { padding-top: 3px; } }=20
+/* IE: correctly scale images with w/h attbs */ img { -ms-interpolation-mod=
+e: bicubic; }=20
+.layout { min-width: 100%; }=20
+table { table-layout: fixed; } .shell_outer-row, .shell_panel-row { table-l=
+ayout: auto; }=20
+/* Gmail/Web viewport fix */ u + .body .shell_outer-row { width: 622px; }=20
+@media screen {  @font-face { font-family: 'Roboto'; font-style: normal; fo=
+nt-weight: 400; src: local('Roboto'), local('Roboto-Regular'), url(https://=
+fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2) format('wo=
+ff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+0=
+2DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215; }  }  /* LIST AND p STYLE=
+ OVERRIDES */ .text .text_content-cell p { margin: 0; padding: 0; margin-bo=
+ttom: 0; } .text .text_content-cell ul, .text .text_content-cell ol { paddi=
+ng: 0; margin: 0 0 0 40px; } .text .text_content-cell li { padding: 0; marg=
+in: 0; /* line-height: 1.2; Remove after testing */ } /* Text Link Style Re=
+set */ a { text-decoration: underline; } /* iOS: Autolink styles inherited =
+*/ a[x-apple-data-detectors] { text-decoration: underline !important; font-=
+size: inherit !important; font-family: inherit !important; font-weight: inh=
+erit !important; line-height: inherit !important; color: inherit !important=
+; } /* FF/Chrome: Smooth font rendering */ .text .text_content-cell { -webk=
+it-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+</style> <!--[if gte mso 9]> <style id=3D"ol-styles">=20
+/* OUTLOOK-SPECIFIC STYLES */ li { text-indent: -1em; padding: 0; margin: 0=
+; /* line-height: 1.2; Remove after testing */ } ul, ol { padding: 0 0 0 40=
+px; } p { margin: 0; padding: 0; margin-bottom: 0; }=20
+</style> <![endif]-->  <style>@media only screen and (max-width:480px) {
+.button_content-cell {
+padding-top: 10px !important; padding-right: 20px !important; padding-botto=
+m: 10px !important; padding-left: 20px !important;
+}
+.button_border-row .button_content-cell {
+padding-top: 10px !important; padding-right: 20px !important; padding-botto=
+m: 10px !important; padding-left: 20px !important;
+}
+.column .content-padding-horizontal {
+padding-left: 20px !important; padding-right: 20px !important;
+}
+.layout .column .content-padding-horizontal .content-padding-horizontal {
+padding-left: 0px !important; padding-right: 0px !important;
+}
+.layout .column .content-padding-horizontal .block-wrapper_border-row .cont=
+ent-padding-horizontal {
+padding-left: 20px !important; padding-right: 20px !important;
+}
+.dataTable {
+overflow: auto !important;
+}
+.dataTable .dataTable_content {
+width: auto !important;
+}
+.icons_container {
+text-align: center !important;
+}
+.image--mobile-scale .image_container img {
+width: auto !important;
+}
+.image--mobile-center .image_container img {
+margin-left: auto !important; margin-right: auto !important;
+}
+.image.image--float-left {
+float: none !important;
+}
+.image.image--float-right {
+float: none !important;
+}
+.layout-margin .layout-margin_cell {
+padding: 0px 20px !important;
+}
+.layout-margin--uniform .layout-margin_cell {
+padding: 20px 20px !important;
+}
+.scale {
+width: 100% !important;
+}
+.stack {
+display: block !important; box-sizing: border-box;
+}
+.hide {
+display: none !important;
+}
+u + .body .shell_outer-row {
+width: 100% !important;
+}
+.socialFollow_container {
+text-align: center !important;
+}
+.text .text_content-cell {
+font-size: 16px !important;
+}
+.text .text_content-cell h1 {
+font-size: 24px !important;
+}
+.text .text_content-cell h2 {
+font-size: 20px !important;
+}
+.text .text_content-cell h3 {
+font-size: 20px !important;
+}
+.text--sectionHeading .text_content-cell {
+font-size: 24px !important;
+}
+.text--heading .text_content-cell {
+font-size: 24px !important;
+}
+.text--feature .text_content-cell h2 {
+font-size: 20px !important;
+}
+.text--articleHeading .text_content-cell {
+font-size: 20px !important;
+}
+.text--article .text_content-cell h3 {
+font-size: 20px !important;
+}
+.text--featureHeading .text_content-cell {
+font-size: 20px !important;
+}
+.text--feature .text_content-cell h3 {
+font-size: 20px !important;
+}
+.text--dataTable .text_content-cell .dataTable .dataTable_content-cell {
+font-size: 12px !important;
+}
+.text--dataTable .text_content-cell .dataTable th.dataTable_content-cell {
+font-size: px !important;
+}
+}
+</style>
+</head> <body class=3D"body template template--en-US" data-template-version=
+=3D"1.53.6" data-canonical-name=3D"CPE-PT1001" lang=3D"en-US" align=3D"cent=
+er" style=3D"-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; mi=
+n-width: 100%; width: 100%; margin: 0px; padding: 0px;"> <div id=3D"prehead=
+er" style=3D"color: transparent; display: none; font-size: 1px; line-height=
+: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;"><spa=
+n data-entity-ref=3D"preheader"></span></div> <div id=3D"tracking-image" st=
+yle=3D"color: transparent; display: none; font-size: 1px; line-height: 1px;=
+ max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;"><img src=
+=3D"https://m7l94usab.cc.rs6.net/on.jsp?ca=3D6e7feed4-682f-407b-bc92-b1dd8e=
+ccc637&amp;a=3D1119543439244&amp;c=3D6edd1622-3ed3-11ea-84c7-d4ae5275b546&a=
+mp;ch=3D6f2b119c-3ed3-11ea-84c7-d4ae5275b546" alt=3D""></div> <div class=3D=
+"shell" lang=3D"en-US" dir=3D"ltr" style=3D"background-color: #ffffff;">   =
+ <table class=3D"shell_panel-row" width=3D"100%" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" style=3D"background: #ffffff url('') repeat left t=
+op;" bgcolor=3D"#ffffff" background=3D""> <tr class=3D""> <td class=3D"shel=
+l_panel-cell" style=3D"background-color: #cccccc;" align=3D"center" valign=
+=3D"top" bgcolor=3D"#cccccc"> <table class=3D"shell_width-row scale" style=
+=3D"width: 600px;" align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0"> <tr> <td class=3D"shell_width-cell" style=3D"padding: 15px 10px;=
+" align=3D"center" valign=3D"top"> <table class=3D"shell_content-row" width=
+=3D"100%" align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+> <tr> <td class=3D"shell_content-cell" style=3D"background-color: #ffffff;=
+ border-radius: 10px; padding: 0; border: 0px solid #c03e30;" align=3D"cent=
+er" valign=3D"top" bgcolor=3D"#ffffff"> <table class=3D"layout-margin" styl=
+e=3D"" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <tr=
+> <td class=3D"layout-margin_cell" style=3D"padding: 0px 20px;" align=3D"ce=
+nter" valign=3D"top"> <table class=3D"layout-border layout-border--solid" s=
+tyle=3D"" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> =
+<tr> <td class=3D"layout-border_cell" style=3D"background-color: #ffffff; p=
+adding: 2px;" align=3D"center" valign=3D"top" bgcolor=3D"#ffffff">
+<table class=3D"layout layout--2-column" style=3D"table-layout: fixed; back=
+ground-color: #ffffff;" width=3D"100%" border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" bgcolor=3D"#ffffff"> <tr> <td class=3D"column column--1 scale =
+stack" style=3D"width: 15%;" align=3D"center" valign=3D"top"> <table class=
+=3D"image image--padding-vertical image--mobile-scale image--mobile-center"=
+ width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <tr> <td =
+class=3D"image_container content-padding-horizontal" style=3D"padding: 0px;=
+" align=3D"center" valign=3D"top"> <table class=3D"image_container-caption =
+text" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"table-layou=
+t: fixed;"> <tr> <td class=3D"text_content-cell" style=3D"border-top-left-r=
+adius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; =
+border-bottom-left-radius: 0px; text-align: center; font-family: Roboto,san=
+s-serif; color: #000000; font-size: 12px; line-height: 1.2; display: block;=
+ word-wrap: break-word; overflow: auto; padding: 8px 0px;" align=3D"center"=
+> <a href=3D"https://m7l94usab.cc.rs6.net/tn.jsp?f=3D001DoZQcpm47oL8adtOIR_=
+3JhX4xcMU4_tbWjE2jzyG8g77JOhvVcLR4ln6l9cfGb6PAEyh-0rayo5ohjPSA8-3yiKlnhvMSU=
+9mJybxMJHxVeadU2GyrM4nyTEk7UCwt7nkpF2VgD62aU2NHBhlWsvNTet-HbMZ87Kh&amp;c=3D=
+Klc7IZPHobViCP_mDiWExuvwJQPX2yg_MJGKv1S4Doby8wU-GCIYOQ=3D=3D&amp;ch=3D4bPib=
+5AXREP2reuxWZlX6PCgvJoEBxa7K3tovERVHzExnefagpIU0w=3D=3D" data-trackable=3D"=
+true" style=3D"color: #c03e30; font-weight: normal; text-decoration: underl=
+ine; font-style: normal;"><img data-image-content=3D"" class=3D"image_conte=
+nt" style=3D"display: block; height: auto; max-width: 100%;" width=3D"63" s=
+rc=3D"https://files.constantcontact.com/c8f2df9a401/4d2389a7-1d80-41b5-b044=
+-dd7af61f200c.png?rdr=3Dtrue" alt=3D""></a>  </td> </tr> </table> </td> </t=
+r> </table>  </td>  <td class=3D"column column--2 scale stack" style=3D"wid=
+th: 85%;" align=3D"center" valign=3D"top"> <table class=3D"text text--artic=
+le text--padding-vertical" width=3D"100%" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" style=3D"table-layout: fixed;"> <tr> <td class=3D"text_cont=
+ent-cell content-padding-horizontal" style=3D"line-height: 1; text-align: l=
+eft; font-family: Verdana,Geneva,sans-serif; color: #403F42; font-size: 12p=
+x; display: block; word-wrap: break-word; padding: 10px 20px 8px 10px;" ali=
+gn=3D"left" valign=3D"top">
+<h2 style=3D"text-align: center; font-family: Arial,Verdana,Helvetica,sans-=
+serif; color: #606d78; font-size: 22px; font-weight: bold; margin: 0;" alig=
+n=3D"center"><span style=3D"font-size: 20px; color: rgb(192, 62, 48);">=EF=
+=BB=BFTONKA INTERNATIONAL CORPORATION</span></h2>
+<h3 style=3D"text-align: center; font-family: Roboto,sans-serif; color: #71=
+7a80; font-size: 18px; font-weight: bold; margin: 0;" align=3D"center"><spa=
+n style=3D"font-size: 14px; color: rgb(79, 85, 90); font-weight: normal;">1=
+700 Alma Dr, Suite 242, Plano, Texas 75075</span></h3>
+</td> </tr> </table>  </td> </tr> </table> </td> </tr> </table>  </td> </tr=
+> </table> <table class=3D"layout layout--1-column" style=3D"table-layout: =
+fixed;" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <t=
+r> <td class=3D"column column--1 scale stack" style=3D"width: 100%;" align=
+=3D"center" valign=3D"top">
+<table class=3D"divider" width=3D"100%" cellpadding=3D"0" cellspacing=3D"0"=
+ border=3D"0"> <tr> <td class=3D"divider_container content-padding-horizont=
+al" style=3D"padding: 0px 20px;" width=3D"100%" align=3D"center" valign=3D"=
+top"> <table class=3D"divider_content-row" style=3D"height: 1px; width: 100=
+%;" cellpadding=3D"0" cellspacing=3D"0" border=3D"0"> <tr> <td class=3D"div=
+ider_content-cell" style=3D"padding-bottom: 2px; background-color: #c03e30;=
+ height: 1px; line-height: 1px; border-bottom-width: 0px;" height=3D"1" ali=
+gn=3D"center" bgcolor=3D"#c03e30"> <img alt=3D"" width=3D"5" height=3D"1" b=
+order=3D"0" hspace=3D"0" vspace=3D"0" src=3D"https://imgssl.constantcontact=
+.com/letters/images/1101116784221/S.gif" style=3D"display: block; height: 1=
+px; width: 5px;"> </td> </tr> </table> </td> </tr> </table> </td> </tr> </t=
+able> <table class=3D"layout layout--1-column" style=3D"table-layout: fixed=
+;" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <tr> <t=
+d class=3D"column column--1 scale stack" style=3D"width: 100%;" align=3D"ce=
+nter" valign=3D"top">  <table class=3D"button button--padding-vertical" wid=
+th=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"table=
+-layout: fixed; word-break: break-word;"> <tr> <td class=3D"button_containe=
+r content-padding-horizontal" style=3D"padding: 10px 20px;" align=3D"right"=
+> <table class=3D"button_content-row" style=3D"" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0"> <tr> <td class=3D"button_content-cell button_link=
+" style=3D"width: inherit; border-radius: 10px; border-spacing: 0; backgrou=
+nd-color: #c03e30; max-width: 100%; color: #FFFFFF; font-family: Roboto,san=
+s-serif; font-size: 14px; word-wrap: break-word; text-decoration: none; pad=
+ding: 8px 15px; border-style: none;" align=3D"center" bgcolor=3D"#c03e30"> =
+<a class=3D"button_link" href=3D"https://m7l94usab.cc.rs6.net/tn.jsp?f=3D00=
+1DoZQcpm47oL8adtOIR_3JhX4xcMU4_tbWjE2jzyG8g77JOhvVcLR4ln6l9cfGb6PAEyh-0rayo=
+5ohjPSA8-3yiKlnhvMSU9mJybxMJHxVeadU2GyrM4nyTEk7UCwt7nkpF2VgD62aU3yywpqFp8vB=
+vYABFVmIGkg&amp;c=3DKlc7IZPHobViCP_mDiWExuvwJQPX2yg_MJGKv1S4Doby8wU-GCIYOQ=
+=3D=3D&amp;ch=3D4bPib5AXREP2reuxWZlX6PCgvJoEBxa7K3tovERVHzExnefagpIU0w=3D=
+=3D" target=3D"_blank" data-trackable=3D"true" style=3D"font-family: Arial,=
+Verdana,Helvetica,sans-serif; font-weight: bold; color: #FFFFFF; font-size:=
+ 14px; word-wrap: break-word; text-decoration: none;">www.tonkaintl.com</a>=
+ </td> </tr> </table> </td> </tr> </table>    </td> </tr> </table> <table c=
+lass=3D"layout layout--heading layout--1-column" style=3D"table-layout: fix=
+ed;" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <tr> =
+<td class=3D"column column--1 scale stack" style=3D"width: 100%;" align=3D"=
+center" valign=3D"top"> <table class=3D"text text--padding-vertical" width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"table-l=
+ayout: fixed;"> <tr> <td class=3D"text_content-cell content-padding-horizon=
+tal" style=3D"text-align: center; font-family: Roboto,sans-serif; color: #0=
+00000; font-size: 12px; line-height: 1.2; display: block; word-wrap: break-=
+word; padding: 10px 20px 0px;" align=3D"center" valign=3D"top"><h1 style=3D=
+"text-align: left; font-family: Roboto,sans-serif; color: #000000; font-siz=
+e: 26px; font-weight: bold; margin: 0;" align=3D"left"><span style=3D"font-=
+size: 18px;">2007 KW T800 Tandem Axle Day Cab</span></h1></td> </tr> </tabl=
+e>  </td> </tr> </table> <table class=3D"layout layout--feature layout--1-c=
+olumn" style=3D"table-layout: fixed; background-color: #ffffff;" width=3D"1=
+00%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" bgcolor=3D"#ffffff"> =
+<tr> <td class=3D"column column--1 scale stack" style=3D"width: 100%;" alig=
+n=3D"center" valign=3D"top"> <table class=3D"text text--feature text--paddi=
+ng-vertical" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" style=3D"table-layout: fixed;"> <tr> <td class=3D"text_content-cell conte=
+nt-padding-horizontal" style=3D"text-align: center; font-family: Verdana,Ge=
+neva,sans-serif; color: #403f42; font-size: 12px; line-height: 1.2; display=
+: block; word-wrap: break-word; padding: 2px 20px;" align=3D"center" valign=
+=3D"top"><h3 style=3D"text-align: left; font-family: Roboto,sans-serif; col=
+or: #2d3133; font-size: 18px; font-weight: bold; margin: 0;" align=3D"left"=
+><span style=3D"font-size: 16px; color: rgb(77, 77, 77); font-family: Robot=
+o, sans-serif;">STK#: 855161000</span></h3></td> </tr> </table>  </td> </tr=
+> </table> <table class=3D"layout layout--1-column" style=3D"table-layout: =
+fixed;" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <t=
+r> <td class=3D"column column--1 scale stack" style=3D"width: 100%;" align=
+=3D"center" valign=3D"top">
+<table class=3D"divider" width=3D"100%" cellpadding=3D"0" cellspacing=3D"0"=
+ border=3D"0"> <tr> <td class=3D"divider_container content-padding-horizont=
+al" style=3D"padding: 10px 20px;" width=3D"100%" align=3D"center" valign=3D=
+"top"> <table class=3D"divider_content-row" style=3D"height: 1px; width: 10=
+0%;" cellpadding=3D"0" cellspacing=3D"0" border=3D"0"> <tr> <td class=3D"di=
+vider_content-cell" style=3D"height: 1px; line-height: 1px; padding-bottom:=
+ 0px; background-color: #c03e30; border-bottom-width: 0px;" height=3D"1" al=
+ign=3D"center" bgcolor=3D"#c03e30"> <img alt=3D"" width=3D"5" height=3D"1" =
+border=3D"0" hspace=3D"0" vspace=3D"0" src=3D"https://imgssl.constantcontac=
+t.com/letters/images/1101116784221/S.gif" style=3D"display: block; height: =
+1px; width: 5px;"> </td> </tr> </table> </td> </tr> </table> </td> </tr> </=
+table> <table class=3D"layout layout--1-column" style=3D"table-layout: fixe=
+d;" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <tr> <=
+td class=3D"column column--1 scale stack" style=3D"width: 100%;" align=3D"c=
+enter" valign=3D"top"> <table class=3D"text text--padding-vertical" width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"table-l=
+ayout: fixed;"> <tr> <td class=3D"text_content-cell content-padding-horizon=
+tal" style=3D"text-align: left; font-family: Roboto,sans-serif; color: #000=
+000; font-size: 12px; line-height: 1.2; display: block; word-wrap: break-wo=
+rd; padding: 10px 20px 0px;" align=3D"left" valign=3D"top">
+<p style=3D"margin: 0;"><span style=3D"font-size: 18px;">Cummins ISX Engine=
+</span></p>
+<p style=3D"margin: 0;"><span style=3D"font-size: 18px;">Manual Transmissio=
+n</span></p>
+<p style=3D"margin: 0;"><span style=3D"font-size: 18px;">826,455 Miles</spa=
+n></p>
+<p style=3D"margin: 0;"><span style=3D"font-size: 18px;">No Issues / No Cod=
+es</span></p>
+</td> </tr> </table>   <table class=3D"text text--padding-vertical" width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"table-l=
+ayout: fixed;"> <tr> <td class=3D"text_content-cell content-padding-horizon=
+tal" style=3D"line-height: 1.5; text-align: left; font-family: Roboto,sans-=
+serif; color: #000000; font-size: 12px; display: block; word-wrap: break-wo=
+rd; padding: 0px 20px 10px;" align=3D"left" valign=3D"top"><h2 style=3D"fon=
+t-family: Arial,Verdana,Helvetica,sans-serif; color: #606d78; font-size: 22=
+px; font-weight: bold; margin: 0;"><span style=3D"font-size: 18px; color: r=
+gb(192, 62, 48);">EXW: Wisconsin @ $10,000</span></h2></td> </tr> </table> =
+  <table class=3D"text text--padding-vertical" width=3D"100%" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" style=3D"table-layout: fixed;"> <tr> <t=
+d class=3D"text_content-cell content-padding-horizontal" style=3D"line-heig=
+ht: 1.5; text-align: left; font-family: Roboto,sans-serif; color: #000000; =
+font-size: 12px; display: block; word-wrap: break-word; padding: 10px 20px;=
+" align=3D"left" valign=3D"top">
+<p style=3D"margin: 0;"><span style=3D"font-size: 16px; font-weight: bold;"=
+>More Images</span></p>
+<p style=3D"margin: 0;"><a href=3D"https://m7l94usab.cc.rs6.net/tn.jsp?f=3D=
+001DoZQcpm47oL8adtOIR_3JhX4xcMU4_tbWjE2jzyG8g77JOhvVcLR4ln6l9cfGb6PI51smFpd=
+Inz8wF_NydEq6JTsi4hqamVZqKjr4jvqA5QVRKD0vSZ5javVZw4qwKuMg-Ze6KGbndfUvO5C-OB=
+gBvpmUJ1g6CXZwDtNdp88OFnuglzcbWuBDEx6XLNKPTEAJHah92jfZbWzS3g5tei-NsqH17qjJ5=
+98&amp;c=3DKlc7IZPHobViCP_mDiWExuvwJQPX2yg_MJGKv1S4Doby8wU-GCIYOQ=3D=3D&amp=
+;ch=3D4bPib5AXREP2reuxWZlX6PCgvJoEBxa7K3tovERVHzExnefagpIU0w=3D=3D" rel=3D"=
+noopener noreferrer" target=3D"_blank" style=3D"color: #c03e30; font-weight=
+: normal; text-decoration: underline; font-style: normal;">https://www.tonk=
+aintl.com/inventory/855161000/2007-kw-t800-tadc/</a></p>
+</td> </tr> </table>  </td> </tr> </table> <table class=3D"layout layout--1=
+-column" style=3D"table-layout: fixed;" width=3D"100%" border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0"> <tr> <td class=3D"column column--1 scale stac=
+k" style=3D"width: 100%;" align=3D"center" valign=3D"top"> <table class=3D"=
+image image--padding-vertical image--mobile-scale image--mobile-center" wid=
+th=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <tr> <td clas=
+s=3D"image_container content-padding-horizontal" style=3D"padding: 10px 20p=
+x;" align=3D"center" valign=3D"top"> <table class=3D"image_container-captio=
+n text" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"table-lay=
+out: fixed;"> <tr> <td class=3D"text_content-cell" style=3D"text-align: cen=
+ter; font-family: Roboto,sans-serif; color: #000000; font-size: 12px; line-=
+height: 1.2; display: block; word-wrap: break-word; padding: 0px;" align=3D=
+"center"> <a href=3D"https://m7l94usab.cc.rs6.net/tn.jsp?f=3D001DoZQcpm47oL=
+8adtOIR_3JhX4xcMU4_tbWjE2jzyG8g77JOhvVcLR4ln6l9cfGb6PI51smFpdInz8wF_NydEq6J=
+Tsi4hqamVZqKjr4jvqA5QVRKD0vSZ5javVZw4qwKuMg-Ze6KGbndfUvO5C-OBgBvpmUJ1g6CXZw=
+DtNdp88OFnuglzcbWuBDEx6XLNKPTEAJHah92jfZbXbxmDOmdTh4elgy-otBnR0&amp;c=3DKlc=
+7IZPHobViCP_mDiWExuvwJQPX2yg_MJGKv1S4Doby8wU-GCIYOQ=3D=3D&amp;ch=3D4bPib5AX=
+REP2reuxWZlX6PCgvJoEBxa7K3tovERVHzExnefagpIU0w=3D=3D" data-trackable=3D"tru=
+e" style=3D"color: #c03e30; font-weight: normal; text-decoration: underline=
+; font-style: normal;"><img data-image-content=3D"" class=3D"image_content"=
+ style=3D"display: block; height: auto; max-width: 100%;" width=3D"562" src=
+=3D"https://files.constantcontact.com/c8f2df9a401/dd4f2781-b1d4-428d-96fd-8=
+91c8059880d.jpg?rdr=3Dtrue" alt=3D""></a>  </td> </tr> </table> </td> </tr>=
+ </table>  </td> </tr> </table> <table class=3D"layout layout--1-column" st=
+yle=3D"table-layout: fixed;" width=3D"100%" border=3D"0" cellpadding=3D"0" =
+cellspacing=3D"0"> <tr> <td class=3D"column column--1 scale stack" style=3D=
+"width: 100%;" align=3D"center" valign=3D"top">
+<table class=3D"divider" width=3D"100%" cellpadding=3D"0" cellspacing=3D"0"=
+ border=3D"0"> <tr> <td class=3D"divider_container content-padding-horizont=
+al" style=3D"padding: 14px 20px 50px;" width=3D"100%" align=3D"center" vali=
+gn=3D"top"> <table class=3D"divider_content-row" style=3D"height: 1px; widt=
+h: 100%;" cellpadding=3D"0" cellspacing=3D"0" border=3D"0"> <tr> <td class=
+=3D"divider_content-cell" style=3D"padding-bottom: 2px; height: 1px; line-h=
+eight: 1px; background-color: #c03e30; border-bottom-width: 0px;" height=3D=
+"1" align=3D"center" bgcolor=3D"#c03e30"> <img alt=3D"" width=3D"5" height=
+=3D"1" border=3D"0" hspace=3D"0" vspace=3D"0" src=3D"https://imgssl.constan=
+tcontact.com/letters/images/1101116784221/S.gif" style=3D"display: block; h=
+eight: 1px; width: 5px;"> </td> </tr> </table> </td> </tr> </table> </td> <=
+/tr> </table> <table class=3D"layout layout--1-column" style=3D"table-layou=
+t: fixed;" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0">=
+ <tr> <td class=3D"column column--1 scale stack" style=3D"width: 100%;" ali=
+gn=3D"center" valign=3D"top"> <table class=3D"text text--dataTable text--pa=
+dding-vertical" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"table-layout: fixed;"> <tr> <td class=3D"text_content-cell =
+content-padding-horizontal" style=3D"text-align: left; font-family: Roboto,=
+sans-serif; color: #000000; font-size: 12px; line-height: 1.2; display: blo=
+ck; word-wrap: break-word; padding: 10px 20px;" align=3D"left" valign=3D"to=
+p" data-purpose=3D"dataTable"><div class=3D"dataTable dataTable--outerBorde=
+r dataTable--innerBorder"> <table class=3D"dataTable_content" style=3D"widt=
+h: 100%; min-width: 100%; background-color: #ffffff; border-collapse: colla=
+pse; font-family: Roboto,sans-serif; color: #000000; font-size: 14px; borde=
+r: 1px solid #ffffff;" width=3D"100%" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" bgcolor=3D"#ffffff">  <tr>  <td class=3D"dataTable_content-cell=
+" style=3D"text-align: center; vertical-align: top; padding: 10px; border: =
+1px solid #ffffff;" align=3D"center" valign=3D"top"> <p style=3D"margin: 0;=
+"><span style=3D"font-size: 22px; color: rgb(77, 77, 77); font-weight: bold=
+;">Lyn Warren</span></p>
+<p style=3D"margin: 0;"><br></p>
+<p style=3D"margin: 0;"><span style=3D"font-size: 18px; font-weight: bold; =
+color: rgb(192, 62, 48);">(214) 837-5061</span></p>
+<p style=3D"margin: 0;"><br></p>
+<p style=3D"margin: 0;"><a href=3D"mailto:lyn@tonkaintl.com" rel=3D"noopene=
+r noreferrer" target=3D"_blank" style=3D"font-weight: bold; color: rgb(77, =
+77, 77); text-decoration: underline; font-style: normal;">lyn@tonkaintl.com=
+</a></p> </td>  <td class=3D"dataTable_content-cell" style=3D"text-align: c=
+enter; vertical-align: top; padding: 10px; border: 1px solid #ffffff;" alig=
+n=3D"center" valign=3D"top"> <p style=3D"margin: 0;"><span style=3D"font-si=
+ze: 22px; color: rgb(77, 77, 77); font-weight: bold;">Gary Childs</span></p=
+>
+<p style=3D"margin: 0;"><br></p>
+<p style=3D"margin: 0;"><span style=3D"font-size: 18px; font-weight: bold; =
+color: rgb(192, 62, 48);">(702) 232-0321</span></p>
+<p style=3D"margin: 0;"><br></p>
+<p style=3D"margin: 0;"><a href=3D"mailto:gary@tonkaintl.com" rel=3D"noopen=
+er noreferrer" target=3D"_blank" style=3D"font-weight: bold; color: rgb(77,=
+ 77, 77); text-decoration: underline; font-style: normal;">gary@tonkaintl.c=
+om</a></p> </td>  </tr>  </table> </div></td> </tr> </table>  </td> </tr> <=
+/table> <table class=3D"layout layout--1-column" style=3D"table-layout: fix=
+ed;" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <tr> =
+<td class=3D"column column--1 scale stack" style=3D"width: 100%;" align=3D"=
+center" valign=3D"top">
+<table class=3D"divider" width=3D"100%" cellpadding=3D"0" cellspacing=3D"0"=
+ border=3D"0"> <tr> <td class=3D"divider_container content-padding-horizont=
+al" style=3D"padding: 50px 20px;" width=3D"100%" align=3D"center" valign=3D=
+"top"> <table class=3D"divider_content-row" style=3D"height: 1px; width: 10=
+0%;" cellpadding=3D"0" cellspacing=3D"0" border=3D"0"> <tr> <td class=3D"di=
+vider_content-cell" style=3D"padding-bottom: 2px; height: 1px; line-height:=
+ 1px; background-color: #c03e30; border-bottom-width: 0px;" height=3D"1" al=
+ign=3D"center" bgcolor=3D"#c03e30"> <img alt=3D"" width=3D"5" height=3D"1" =
+border=3D"0" hspace=3D"0" vspace=3D"0" src=3D"https://imgssl.constantcontac=
+t.com/letters/images/1101116784221/S.gif" style=3D"display: block; height: =
+1px; width: 5px;"> </td> </tr> </table> </td> </tr> </table> </td> </tr> </=
+table> <table class=3D"layout layout--heading layout--1-column" style=3D"ta=
+ble-layout: fixed;" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0"> <tr> <td class=3D"column column--1 scale stack" style=3D"width: 1=
+00%;" align=3D"center" valign=3D"top"> <table class=3D"text text--padding-v=
+ertical" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" st=
+yle=3D"table-layout: fixed;"> <tr> <td class=3D"text_content-cell content-p=
+adding-horizontal" style=3D"text-align: center; font-family: Roboto,sans-se=
+rif; color: #000000; font-size: 12px; line-height: 1.2; display: block; wor=
+d-wrap: break-word; padding: 10px 20px;" align=3D"center" valign=3D"top">
+<h1 style=3D"font-family: Roboto,sans-serif; color: #000000; font-size: 26p=
+x; font-weight: bold; margin: 0;"><span style=3D"color: rgb(192, 62, 48);">=
+Tonka International</span></h1>
+<h1 style=3D"font-family: Roboto,sans-serif; color: #000000; font-size: 26p=
+x; font-weight: bold; margin: 0;"><span style=3D"color: rgb(192, 62, 48);">=
+The Right Call, For Every Deal</span></h1>
+</td> </tr> </table>  </td> </tr> </table> <table class=3D"layout layout--1=
+-column" style=3D"table-layout: fixed;" width=3D"100%" border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0"> <tr> <td class=3D"column column--1 scale stac=
+k" style=3D"width: 100%;" align=3D"center" valign=3D"top">
+<table class=3D"divider" width=3D"100%" cellpadding=3D"0" cellspacing=3D"0"=
+ border=3D"0"> <tr> <td class=3D"divider_container content-padding-horizont=
+al" style=3D"padding: 10px 20px;" width=3D"100%" align=3D"center" valign=3D=
+"top"> <table class=3D"divider_content-row" style=3D"height: 1px; width: 10=
+0%;" cellpadding=3D"0" cellspacing=3D"0" border=3D"0"> <tr> <td class=3D"di=
+vider_content-cell" style=3D"height: 1px; line-height: 1px; padding-bottom:=
+ 0px; background-color: #c03e30; border-bottom-width: 0px;" height=3D"1" al=
+ign=3D"center" bgcolor=3D"#c03e30"> <img alt=3D"" width=3D"5" height=3D"1" =
+border=3D"0" hspace=3D"0" vspace=3D"0" src=3D"https://imgssl.constantcontac=
+t.com/letters/images/1101116784221/S.gif" style=3D"display: block; height: =
+1px; width: 5px;"> </td> </tr> </table> </td> </tr> </table> </td> </tr> </=
+table> <table class=3D"layout layout--feature layout--1-column" style=3D"ta=
+ble-layout: fixed; background-color: #ffffff;" width=3D"100%" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" bgcolor=3D"#ffffff"> <tr> <td class=3D"=
+column column--1 scale stack" style=3D"width: 100%;" align=3D"center" valig=
+n=3D"top"> <table class=3D"text text--feature text--padding-vertical" width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"table-l=
+ayout: fixed;"> <tr> <td class=3D"text_content-cell content-padding-horizon=
+tal" style=3D"text-align: center; font-family: Verdana,Geneva,sans-serif; c=
+olor: #403f42; font-size: 12px; line-height: 1.2; display: block; word-wrap=
+: break-word; padding: 10px 20px;" align=3D"center" valign=3D"top"><h1 styl=
+e=3D"font-family: Roboto,sans-serif; color: #ffffff; font-size: 18px; font-=
+weight: bold; margin: 0;"><span style=3D"color: rgb(99, 115, 129); font-siz=
+e: 16px;">Tonka International is a licensed and bonded wholesale dealer bas=
+ed in Plano, Texas, serving companies across the U.S. and internationally s=
+ince 2013. We specialize in helping companies sell heavy equipment=E2=80=94=
+trucks, trailers, marine gear, construction machinery, and more.</span></h1=
+></td> </tr> </table>  </td> </tr> </table> <table class=3D"layout layout--=
+1-column" style=3D"table-layout: fixed;" width=3D"100%" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0"> <tr> <td class=3D"column column--1 scale sta=
+ck" style=3D"width: 100%;" align=3D"center" valign=3D"top">
+<table class=3D"divider" width=3D"100%" cellpadding=3D"0" cellspacing=3D"0"=
+ border=3D"0"> <tr> <td class=3D"divider_container content-padding-horizont=
+al" style=3D"padding: 10px 20px;" width=3D"100%" align=3D"center" valign=3D=
+"top"> <table class=3D"divider_content-row" style=3D"height: 1px; width: 10=
+0%;" cellpadding=3D"0" cellspacing=3D"0" border=3D"0"> <tr> <td class=3D"di=
+vider_content-cell" style=3D"height: 1px; line-height: 1px; padding-bottom:=
+ 0px; background-color: #c03e30; border-bottom-width: 0px;" height=3D"1" al=
+ign=3D"center" bgcolor=3D"#c03e30"> <img alt=3D"" width=3D"5" height=3D"1" =
+border=3D"0" hspace=3D"0" vspace=3D"0" src=3D"https://imgssl.constantcontac=
+t.com/letters/images/1101116784221/S.gif" style=3D"display: block; height: =
+1px; width: 5px;"> </td> </tr> </table> </td> </tr> </table> </td> </tr> </=
+table> <table class=3D"layout layout--navigationBar layout--4-column" style=
+=3D"table-layout: fixed; background-color: #ffffff;" width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" bgcolor=3D"#ffffff"> <tr> <td cl=
+ass=3D"column column--1 scale stack" style=3D"width: 30%;" align=3D"center"=
+ valign=3D"middle"> <table class=3D"text text--feature text--padding-vertic=
+al" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=
+=3D"table-layout: fixed;"> <tr> <td class=3D"text_content-cell content-padd=
+ing-horizontal" style=3D"text-align: center; font-family: Verdana,Geneva,sa=
+ns-serif; color: #403f42; font-size: 12px; line-height: 1.2; display: block=
+; word-wrap: break-word; padding: 10px 0px 10px 20px;" align=3D"center" val=
+ign=3D"top"><p style=3D"margin: 0;"><a href=3D"https://m7l94usab.cc.rs6.net=
+/tn.jsp?f=3D001DoZQcpm47oL8adtOIR_3JhX4xcMU4_tbWjE2jzyG8g77JOhvVcLR4ln6l9cf=
+Gb6PSadxfYDkXxjJBn96gFwdIvmtom-Ib4f9HCeq-riXY4wiZjeK8sDfAjEczCvQ-V1PDuVEBvV=
+QU1JWjmjbZxcGu0Oc4w6rUfWn2uzM55nDx8bCxe3CM3xj3g=3D=3D&amp;c=3DKlc7IZPHobViC=
+P_mDiWExuvwJQPX2yg_MJGKv1S4Doby8wU-GCIYOQ=3D=3D&amp;ch=3D4bPib5AXREP2reuxWZ=
+lX6PCgvJoEBxa7K3tovERVHzExnefagpIU0w=3D=3D" rel=3D"noopener noreferrer" tar=
+get=3D"_blank" style=3D"color: #c03e30; font-weight: bold; text-decoration:=
+ underline; font-style: normal;">SELL YOUR MACHINE</a></p></td> </tr> </tab=
+le>  </td>  <td class=3D"column column--2 scale stack" style=3D"width: 25%;=
+" align=3D"center" valign=3D"middle"> <table class=3D"text text--feature te=
+xt--padding-vertical" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" style=3D"table-layout: fixed;"> <tr> <td class=3D"text_content-c=
+ell content-padding-horizontal" style=3D"text-align: center; font-family: V=
+erdana,Geneva,sans-serif; color: #403f42; font-size: 12px; line-height: 1.2=
+; display: block; word-wrap: break-word; padding: 10px;" align=3D"center" v=
+align=3D"top"><p style=3D"margin: 0;"><a href=3D"https://m7l94usab.cc.rs6.n=
+et/tn.jsp?f=3D001DoZQcpm47oL8adtOIR_3JhX4xcMU4_tbWjE2jzyG8g77JOhvVcLR4ln6l9=
+cfGb6PTdcGVkvR2T8WeD4sP6ynJqEFV6Xe2M12E6eALsP0Nc3WUms9l0nU7ZzUzB7FC0diMBqCb=
+R8mO_VOzZKl0bZnrKiik89bQ5t19ULxKCmat10=3D&amp;c=3DKlc7IZPHobViCP_mDiWExuvwJ=
+QPX2yg_MJGKv1S4Doby8wU-GCIYOQ=3D=3D&amp;ch=3D4bPib5AXREP2reuxWZlX6PCgvJoEBx=
+a7K3tovERVHzExnefagpIU0w=3D=3D" rel=3D"noopener noreferrer" target=3D"_blan=
+k" style=3D"color: #c03e30; font-weight: bold; text-decoration: underline; =
+font-style: normal;">RECENTLY SOLD</a></p></td> </tr> </table>  </td>  <td =
+class=3D"column column--3 scale stack" style=3D"width: 32.5%;" align=3D"cen=
+ter" valign=3D"middle"> <table class=3D"text text--feature text--padding-ve=
+rtical" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" sty=
+le=3D"table-layout: fixed;"> <tr> <td class=3D"text_content-cell content-pa=
+dding-horizontal" style=3D"text-align: center; font-family: Verdana,Geneva,=
+sans-serif; color: #403f42; font-size: 12px; line-height: 1.2; display: blo=
+ck; word-wrap: break-word; padding: 10px;" align=3D"center" valign=3D"top">=
+<p style=3D"margin: 0;"><a href=3D"https://m7l94usab.cc.rs6.net/tn.jsp?f=3D=
+001DoZQcpm47oL8adtOIR_3JhX4xcMU4_tbWjE2jzyG8g77JOhvVcLR4ln6l9cfGb6PmkjS6R5_=
+XkhUfUHOg6GUeqnC31ORWkOfOWT2VsaoWxeX9drIY1zOEottGHI-gUuTnP6714iIwjHTlTMcq4L=
+XgWbfjQ7g-gVNUlguX4i5Sho=3D&amp;c=3DKlc7IZPHobViCP_mDiWExuvwJQPX2yg_MJGKv1S=
+4Doby8wU-GCIYOQ=3D=3D&amp;ch=3D4bPib5AXREP2reuxWZlX6PCgvJoEBxa7K3tovERVHzEx=
+nefagpIU0w=3D=3D" rel=3D"noopener noreferrer" target=3D"_blank" style=3D"co=
+lor: #c03e30; font-weight: bold; text-decoration: underline; font-style: no=
+rmal;">AVAILABLE MACHINES</a></p></td> </tr> </table>  </td>  <td class=3D"=
+column column--4 scale stack" style=3D"width: 12.5%;" align=3D"center" vali=
+gn=3D"middle"> <table class=3D"text text--feature text--padding-vertical" w=
+idth=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"tab=
+le-layout: fixed;"> <tr> <td class=3D"text_content-cell content-padding-hor=
+izontal" style=3D"text-align: center; font-family: Verdana,Geneva,sans-seri=
+f; color: #403f42; font-size: 12px; line-height: 1.2; display: block; word-=
+wrap: break-word; padding: 10px 20px 10px 0px;" align=3D"center" valign=3D"=
+top"><p style=3D"margin: 0;"><a href=3D"https://m7l94usab.cc.rs6.net/tn.jsp=
+?f=3D001DoZQcpm47oL8adtOIR_3JhX4xcMU4_tbWjE2jzyG8g77JOhvVcLR4ln6l9cfGb6PFMI=
+uhWefQPd22CJhdNO57FE2ySSoaTu2MnuLIq1sjfdcyF_h_ZmnA5aue-z5FK2NAxTHH7rPYWh-EV=
+c5v2-lv_Ay9jgj8EF5&amp;c=3DKlc7IZPHobViCP_mDiWExuvwJQPX2yg_MJGKv1S4Doby8wU-=
+GCIYOQ=3D=3D&amp;ch=3D4bPib5AXREP2reuxWZlX6PCgvJoEBxa7K3tovERVHzExnefagpIU0=
+w=3D=3D" rel=3D"noopener noreferrer" target=3D"_blank" style=3D"font-family=
+: Roboto, sans-serif; color: #c03e30; font-weight: bold; text-decoration: u=
+nderline; font-style: normal;">FAQ</a></p></td> </tr> </table>  </td> </tr>=
+ </table> <table class=3D"layout layout--1-column" style=3D"table-layout: f=
+ixed;" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <tr=
+> <td class=3D"column column--1 scale stack" style=3D"width: 100%;" align=
+=3D"center" valign=3D"top">
+<table class=3D"divider" width=3D"100%" cellpadding=3D"0" cellspacing=3D"0"=
+ border=3D"0"> <tr> <td class=3D"divider_container content-padding-horizont=
+al" style=3D"padding: 10px 20px;" width=3D"100%" align=3D"center" valign=3D=
+"top"> <table class=3D"divider_content-row" style=3D"height: 1px; width: 10=
+0%;" cellpadding=3D"0" cellspacing=3D"0" border=3D"0"> <tr> <td class=3D"di=
+vider_content-cell" style=3D"height: 1px; line-height: 1px; padding-bottom:=
+ 0px; background-color: #c03e30; border-bottom-width: 0px;" height=3D"1" al=
+ign=3D"center" bgcolor=3D"#c03e30"> <img alt=3D"" width=3D"5" height=3D"1" =
+border=3D"0" hspace=3D"0" vspace=3D"0" src=3D"https://imgssl.constantcontac=
+t.com/letters/images/1101116784221/S.gif" style=3D"display: block; height: =
+1px; width: 5px;"> </td> </tr> </table> </td> </tr> </table> </td> </tr> </=
+table> <table class=3D"layout layout--1-column" style=3D"table-layout: fixe=
+d;" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <tr> <=
+td class=3D"column column--1 scale stack" style=3D"width: 100%;" align=3D"c=
+enter" valign=3D"top"> <table class=3D"socialFollow socialFollow--padding-v=
+ertical" width=3D"100%" cellpadding=3D"0" cellspacing=3D"0" border=3D"0"> <=
+tr> <td class=3D"socialFollow_container content-padding-horizontal" style=
+=3D"height: 1px; line-height: 1px; padding: 10px 20px;" width=3D"100%" alig=
+n=3D"center" valign=3D"top"> <a href=3D"https://m7l94usab.cc.rs6.net/tn.jsp=
+?f=3D001DoZQcpm47oL8adtOIR_3JhX4xcMU4_tbWjE2jzyG8g77JOhvVcLR4ln6l9cfGb6PHb0=
+nUD6v-4bJOFb5zYyaGXenoshWhDJs56PRQhW6AOU8g_xNgxLTKcY9AsA6BB54cUU2KMst8FgaLW=
+-xFnliMu1_9GliMr4rMT_i0EwpAZs=3D&amp;c=3DKlc7IZPHobViCP_mDiWExuvwJQPX2yg_MJ=
+GKv1S4Doby8wU-GCIYOQ=3D=3D&amp;ch=3D4bPib5AXREP2reuxWZlX6PCgvJoEBxa7K3tovER=
+VHzExnefagpIU0w=3D=3D" data-trackable=3D"true"><img class=3D"socialFollow_i=
+con" alt=3D"Facebook" width=3D"32" border=3D"0" src=3D"https://imgssl.const=
+antcontact.com/letters/images/CPE/SocialIconsV2/squares/color/facebook.png"=
+ style=3D"display: inline-block; margin: 0; padding: 0;"></a> &nbsp;<a href=
+=3D"https://m7l94usab.cc.rs6.net/tn.jsp?f=3D001DoZQcpm47oL8adtOIR_3JhX4xcMU=
+4_tbWjE2jzyG8g77JOhvVcLR4ln6l9cfGb6P6Hh52NpVbZ6M9roAd8Lc0sG0Wj3GnNayJJxQ22_=
+KxEw0d10ho0ndhE7qUU-cRCXoY_Pu3O7tzx2hxLEc4Yhp3Q=3D=3D&amp;c=3DKlc7IZPHobViC=
+P_mDiWExuvwJQPX2yg_MJGKv1S4Doby8wU-GCIYOQ=3D=3D&amp;ch=3D4bPib5AXREP2reuxWZ=
+lX6PCgvJoEBxa7K3tovERVHzExnefagpIU0w=3D=3D" data-trackable=3D"true"><img cl=
+ass=3D"socialFollow_icon" alt=3D"X" width=3D"32" border=3D"0" src=3D"https:=
+//imgssl.constantcontact.com/letters/images/CPE/SocialIconsV2/squares/color=
+/x.png" style=3D"display: inline-block; margin: 0; padding: 0;"></a> &nbsp;=
+<a href=3D"https://m7l94usab.cc.rs6.net/tn.jsp?f=3D001DoZQcpm47oL8adtOIR_3J=
+hX4xcMU4_tbWjE2jzyG8g77JOhvVcLR4ln6l9cfGb6Pz_DKO3YemDNFo6IblTYTex3y9RnEUxP8=
+a5n5KXGCbxxPnFd3n2a3k2dl5LuSC61TjENfj7z_VIjx9t6JgOXxgsxIo-0u3ucsAXqxRBb_ZP4=
+=3D&amp;c=3DKlc7IZPHobViCP_mDiWExuvwJQPX2yg_MJGKv1S4Doby8wU-GCIYOQ=3D=3D&am=
+p;ch=3D4bPib5AXREP2reuxWZlX6PCgvJoEBxa7K3tovERVHzExnefagpIU0w=3D=3D" data-t=
+rackable=3D"true"><img class=3D"socialFollow_icon" alt=3D"YouTube" width=3D=
+"32" border=3D"0" src=3D"https://imgssl.constantcontact.com/letters/images/=
+CPE/SocialIconsV2/squares/color/youtube.png" style=3D"display: inline-block=
+; margin: 0; padding: 0;"></a> &nbsp;<a href=3D"https://m7l94usab.cc.rs6.ne=
+t/tn.jsp?f=3D001DoZQcpm47oL8adtOIR_3JhX4xcMU4_tbWjE2jzyG8g77JOhvVcLR4ln6l9c=
+fGb6PjfJcWeNg6IhoPYNvtE5Ilje5-nsp7teeNVtJrMU1yCAoahPP8GErGgxFo-yFAcVz-4l-Fn=
+gcj305v2LFxXjrt5iNEA0xT14MsDhN4Syonz2XHherXHqEWg=3D=3D&amp;c=3DKlc7IZPHobVi=
+CP_mDiWExuvwJQPX2yg_MJGKv1S4Doby8wU-GCIYOQ=3D=3D&amp;ch=3D4bPib5AXREP2reuxW=
+ZlX6PCgvJoEBxa7K3tovERVHzExnefagpIU0w=3D=3D" data-trackable=3D"true"><img c=
+lass=3D"socialFollow_icon" alt=3D"LinkedIn" width=3D"32" border=3D"0" src=
+=3D"https://imgssl.constantcontact.com/letters/images/CPE/SocialIconsV2/squ=
+ares/color/linkedin.png" style=3D"display: inline-block; margin: 0; padding=
+: 0;"></a> </td> </tr> </table>  </td> </tr> </table>  </td> </tr> </table>=
+ </td> </tr> </table> </td> </tr> <tr class=3D""> <td class=3D"shell_panel-=
+cell shell_panel-cell--footer" style=3D"background-color: #FFFFFF;" align=
+=3D"center" valign=3D"top" bgcolor=3D"#FFFFFF"> <table class=3D"shell_width=
+-row scale" style=3D"width: 622px;" align=3D"center" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0"> <tr> <td class=3D"shell_width-cell" style=3D"pa=
+dding: 0px 10px;" align=3D"center" valign=3D"top"> <table class=3D"shell_co=
+ntent-row" width=3D"100%" align=3D"center" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0"> <tr> <td class=3D"shell_content-cell" style=3D"background=
+-color: transparent; padding: 0; border: 0 solid #c03e30;" align=3D"center"=
+ valign=3D"top" bgcolor=3D"transparent"> <table class=3D"layout layout--1-c=
+olumn" style=3D"table-layout: fixed;" width=3D"100%" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0"> <tr> <td class=3D"column column--1 scale stack"=
+ style=3D"width: 100%;" align=3D"center" valign=3D"top"> <table class=3D"co=
+mplianceAddress complianceAddress--padding-vertical" width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <tr> <td class=3D"complianceAdd=
+ress_content-cell content-padding-horizontal" align=3D"center" style=3D"col=
+or: #595959; font-family: Verdana,Geneva,sans-serif; font-size: 12px; line-=
+height: 1.2; padding: 10px 20px;"> <p style=3D"margin: 0;"><span>Tonka Inte=
+rnational Corporation | </span><span>1700 Alma Drive</span><span> Suite 242=
+  | </span><span>Plano, TX 75075 US</span></p> </td> </tr> </table>   <tabl=
+e class=3D"complianceLinks complianceLinks--padding-vertical" width=3D"100%=
+" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"> <tr> <td class=3D"compl=
+ianceLinks_content-cell content-padding-horizontal" align=3D"center" style=
+=3D"color: #595959; font-family: Verdana,Geneva,sans-serif; font-size: 12px=
+; line-height: 1.2; padding: 10px 20px;"> <p style=3D"margin: 0;"> <a href=
+=3D"https://visitor.constantcontact.com/do?p=3Dun&amp;m=3D001qKqk59bsnkF1Jf=
+itQEgnPw%3D&amp;ch=3D6f2b119c-3ed3-11ea-84c7-d4ae5275b546&amp;ca=3D6e7feed4=
+-682f-407b-bc92-b1dd8eccc637" data-track=3D"false" style=3D"color: inherit;=
+">Unsubscribe<span></span></a><span> | </span><span></span><span><a href=3D=
+"https://visitor.constantcontact.com/do?p=3Doo&amp;m=3D001qKqk59bsnkF1JfitQ=
+EgnPw%3D&amp;ch=3D6f2b119c-3ed3-11ea-84c7-d4ae5275b546&amp;ca=3D6e7feed4-68=
+2f-407b-bc92-b1dd8eccc637" data-track=3D"false" style=3D"color: inherit;">U=
+pdate Profile</a></span><span> | </span><span><span></span><a href=3D"https=
+://www.constantcontact.com/legal/customer-contact-data-notice" data-track=
+=3D"false" style=3D"color: inherit;">Constant Contact Data Notice</a></span=
+> </p> </td> </tr> </table>  </td> </tr> </table>  </td> </tr> </table> </t=
+d> </tr> </table> </td> </tr> <tr class=3D""> <td class=3D"shell_panel-cell=
+ shell_panel-cell--footer" style=3D"background-color: #FFFFFF;" align=3D"ce=
+nter" valign=3D"top" bgcolor=3D"#FFFFFF"> <table class=3D"shell_width-row s=
+cale" style=3D"width: 622px;" align=3D"center" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0"> <tr> <td class=3D"shell_width-cell" style=3D"padding:=
+ 0px 10px;" align=3D"center" valign=3D"top"> <table class=3D"shell_content-=
+row" width=3D"100%" align=3D"center" border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0"> <tr> <td class=3D"shell_content-cell" style=3D"background-color=
+: transparent; padding: 0; border: 0 solid #c03e30;" align=3D"center" valig=
+n=3D"top" bgcolor=3D"transparent"> <table class=3D"layout layout--1-column"=
+ style=3D"table-layout: fixed;" width=3D"100%" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0"> <tr> <td class=3D"column column--1 scale stack" style=
+=3D"width: 100%;" align=3D"center" valign=3D"top"> <table class=3D"image im=
+age--mobile-center" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0"> <tr> <td class=3D"image_container" style=3D"" align=3D"center" va=
+lign=3D"top"> <table class=3D"image_container-caption text" border=3D"0" ce=
+llpadding=3D"0" cellspacing=3D"0" style=3D"table-layout: fixed;"> <tr> <td =
+class=3D"text_content-cell" style=3D"text-align: center; font-family: Robot=
+o,sans-serif; color: #000000; font-size: 12px; line-height: 1.2; display: b=
+lock; word-wrap: break-word; padding: 0px;" align=3D"center"> <a href=3D"ht=
+tps://www.constantcontact.com/landing1/vr/home?cc=3Dnge&amp;utm_campaign=3D=
+nge&amp;rmc=3DVF21_CPE&amp;utm_medium=3DVF21_CPE&amp;utm_source=3Dviral&amp=
+;pn=3Ddelinquentpartnerenduseraccounts&amp;nav=3D6e7feed4-682f-407b-bc92-b1=
+dd8eccc637" data-trackable=3D"false" style=3D"color: #c03e30; font-weight: =
+normal; text-decoration: underline; font-style: normal;"><img data-image-co=
+ntent=3D"" class=3D"image_content" style=3D"display: block; height: auto; m=
+ax-width: 100%;" width=3D"220" src=3D"https://imgssl.constantcontact.com/le=
+tters/images/CPE/referralLogos/H-Stacked-FC-WhiteBG-Email-Footer.png" alt=
+=3D"Constant Contact"></a>  </td> </tr> </table> </td> </tr> </table>  </td=
+> </tr> </table>  </td> </tr> </table> </td> </tr> </table> </td> </tr>  </=
+table> </div>  </body>  </html>
+
+------=_Part_16377232_1258644943.1765571015492--
