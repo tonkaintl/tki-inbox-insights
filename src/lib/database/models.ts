@@ -432,9 +432,11 @@ export interface IBroadcastItem extends Document {
   stock_number: string | null; // STK# from the broadcast
   machine_info: string[]; // Specs like engine, transmission, miles, condition
   machine_url: string | null; // Link to the machine listing on tonkaintl.com
+  youtube_url: string | null; // Link to YouTube video if available
   price: string | null;
   location: string | null;
   images: string[];
+  notes: string;
   completed: boolean;
   parsed_at: Date;
   raw_html: string;
@@ -493,6 +495,11 @@ const BroadcastItemSchema = new Schema<IBroadcastItem>(
       trim: true,
       default: null,
     },
+    youtube_url: {
+      type: String,
+      trim: true,
+      default: null,
+    },
     price: {
       type: String,
       trim: true,
@@ -507,6 +514,11 @@ const BroadcastItemSchema = new Schema<IBroadcastItem>(
       type: [String],
       required: true,
       default: [],
+    },
+    notes: {
+      type: String,
+      trim: true,
+      default: "",
     },
     completed: {
       type: Boolean,

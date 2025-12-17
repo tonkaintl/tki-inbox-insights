@@ -169,32 +169,45 @@ function extractLocation(html: string, text: string): string | null {
 }
 
 // Helper function to extract stock number from text or HTML
-function extractStockNumber(html: string, text: string): string | null {
+// Returns array of stock numbers [first, ...others]
+function extractStockNumber(html: string, text: string): string[] {
   console.log("\n🔢 DEBUG: Searching for stock number (STK#)...");
 
   const $ = cheerio.load(html);
 
   // Look in h3 tags first (new design)
-  let stockNumber = null;
+  const stockNumbers: string[] = [];
   $("h3").each((i, el) => {
     const h3Text = $(el).text();
+
+    // Check for multiple stock numbers format: "STK#: (Utility): 409961029 (Wabash): 409961033"
+    const multiMatch = h3Text.match(/STK#?\s*:?\s*.*?(\d{9,}).*?(\d{9,})/i);
+    if (multiMatch) {
+      stockNumbers.push(multiMatch[1], multiMatch[2]);
+      console.log(
+        `   Found multiple in H3 [${i}]: ${multiMatch[1]}, ${multiMatch[2]}`
+      );
+      return false; // break
+    }
+
+    // Single stock number
     const match = h3Text.match(/STK#?\s*:?\s*(\d+)/i);
     if (match) {
-      stockNumber = match[1];
-      console.log(`   Found in H3 [${i}]: ${stockNumber}`);
+      stockNumbers.push(match[1]);
+      console.log(`   Found in H3 [${i}]: ${match[1]}`);
     }
   });
 
-  if (stockNumber) return stockNumber;
+  if (stockNumbers.length > 0) return stockNumbers;
 
   // Fallback: search in full text
   const textMatch = text.match(/STK#?\s*:?\s*(\d+)/i);
   if (textMatch) {
-    stockNumber = textMatch[1];
-    console.log(`   Found in text: ${stockNumber}`);
+    stockNumbers.push(textMatch[1]);
+    console.log(`   Found in text: ${textMatch[1]}`);
   }
 
-  return stockNumber;
+  return stockNumbers;
 }
 
 // Helper function to extract machine info (specs like engine, transmission, miles, condition)
@@ -203,35 +216,50 @@ function extractMachineInfo(html: string): string[] {
 
   const $ = cheerio.load(html);
   const specs: string[] = [];
+  const seenSpecs = new Set<string>();
 
   // Look for text content blocks that might contain specs
-  // In the new design, these appear as separate lines
-  $("p, div").each((i, el) => {
+  // Check p tags, divs, and spans (some specs have font-size styling)
+  $("p, div, span").each((i, el) => {
     const text = $(el).text().trim();
+
+    // Skip if already seen (avoid duplicates)
+    if (seenSpecs.has(text)) return;
 
     // Match patterns like:
     // - "Cummins ISX Engine"
-    // - "Manual Transmission"
-    // - "826,455 Miles"
-    // - "No Issues / No Codes"
+    // - "53' x 102\""
+    // - "Air Ride Suspension"
+    // - "Swing Doors"
+    // - "Aluminum Roofs"
+    // - "Current DOT"
     if (
       text &&
       !text.includes("TONKA") &&
+      !text.includes("Tonka") &&
       !text.includes("@") &&
       !text.includes("Unsubscribe") &&
       !text.includes("www.") &&
-      text.length > 5 &&
+      !text.includes("More Images") &&
+      !text.includes("STK#") &&
+      !text.includes("Plano") &&
+      !text.includes("Texas") &&
+      !text.includes("Alma") &&
+      text.length > 3 &&
       text.length < 150
     ) {
       // Check if it looks like a spec line
       if (
-        /engine|transmission|miles|issues|codes|axle|sleeper|day cab/i.test(
+        /engine|transmission|miles|issues|codes|axle|sleeper|day cab|suspension|doors|roof|dot|x\s*\d+/i.test(
           text
         ) ||
         /\d{3,}\s*miles/i.test(text) ||
-        /no\s+issues/i.test(text)
+        /no\s+issues/i.test(text) ||
+        /\d+'\s*x\s*\d+/i.test(text) || // dimensions like 53' x 102"
+        /^[A-Z][a-z]+\s+(Doors|Roof|Suspension|DOT)/i.test(text) // Swing Doors, Aluminum Roofs, etc.
       ) {
         specs.push(text);
+        seenSpecs.add(text);
         console.log(`   Spec [${specs.length}]: ${text}`);
       }
     }
@@ -267,6 +295,42 @@ function extractMachineUrl(html: string): string | null {
   });
 
   return url;
+}
+
+// Helper function to extract YouTube video URL
+function extractYoutubeUrl(html: string, text: string): string | null {
+  console.log("\n🎥 DEBUG: Searching for YouTube video link...");
+
+  const $ = cheerio.load(html);
+  let youtubeUrl = null;
+
+  // Check link text for YouTube URLs (Constant Contact wraps in tracking URLs)
+  $("a").each((i, el) => {
+    const linkText = $(el).text().trim();
+
+    // Match youtube.com or youtu.be URLs
+    const youtubeMatch = linkText.match(
+      /(https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)[-\w]+)/i
+    );
+    if (youtubeMatch) {
+      youtubeUrl = youtubeMatch[1];
+      console.log(`   Found YouTube URL in link text [${i}]: ${youtubeUrl}`);
+      return false; // break
+    }
+  });
+
+  if (youtubeUrl) return youtubeUrl;
+
+  // Fallback: search in plain text
+  const textMatch = text.match(
+    /(https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)[-\w]+)/i
+  );
+  if (textMatch) {
+    youtubeUrl = textMatch[1];
+    console.log(`   Found YouTube URL in text: ${youtubeUrl}`);
+  }
+
+  return youtubeUrl;
 }
 
 // Helper function to extract image URLs (excluding logo and template images)
@@ -323,7 +387,7 @@ async function testParser() {
     __dirname,
     "..",
     "test-data",
-    "2007 KW T800 Tandem Axle Day Cab.eml"
+    "2005 Caterpillar 800kW Generator _ 1,000kVA.eml"
   );
 
   console.log("📧 Reading test email file...");
@@ -368,9 +432,13 @@ async function testParser() {
 
   // Test all extraction functions
   const fullText = extractText(htmlContent);
-  const stockNumber = extractStockNumber(htmlContent, fullText);
+  const stockNumbers = extractStockNumber(htmlContent, fullText);
+  const primaryStockNumber = stockNumbers.length > 0 ? stockNumbers[0] : null;
+  const additionalStockNumbers = stockNumbers.slice(1);
+
   const machineInfo = extractMachineInfo(htmlContent);
   const machineUrl = extractMachineUrl(htmlContent);
+  const youtubeUrl = extractYoutubeUrl(htmlContent, fullText);
   const price = extractPrice(htmlContent, fullText);
   const location = extractLocation(htmlContent, fullText);
   const images = extractImages(htmlContent);
@@ -378,8 +446,15 @@ async function testParser() {
   console.log(
     "\n" + "=".repeat(80) + "\n📊 FINAL EXTRACTION RESULTS\n" + "=".repeat(80)
   );
-  console.log(`\n📝 Subject: 2007 KW T800 Tandem Axle Day Cab`);
-  console.log(`🔢 Stock#: ${stockNumber || "❌ NOT FOUND"}`);
+  console.log(`\n📝 Subject: 2005 Caterpillar 800kW Generator / 1,000kVA`);
+  console.log(`🔢 Stock# (Primary): ${primaryStockNumber || "❌ NOT FOUND"}`);
+  if (additionalStockNumbers.length > 0) {
+    console.log(
+      `🔢 Stock# (Additional): ${additionalStockNumbers.join(
+        ", "
+      )} - will be added to notes`
+    );
+  }
   console.log(`\n🔧 Machine Info (${machineInfo.length} specs):`);
   if (machineInfo.length === 0) {
     console.log("   ❌ NO SPECS FOUND");
@@ -387,6 +462,7 @@ async function testParser() {
     machineInfo.forEach((spec, idx) => console.log(`   ${idx + 1}. ${spec}`));
   }
   console.log(`\n🔗 Machine URL: ${machineUrl || "❌ NOT FOUND"}`);
+  console.log(`🎥 YouTube URL: ${youtubeUrl || "❌ NOT FOUND"}`);
   console.log(`💰 Price: ${price || "❌ NOT FOUND"}`);
   console.log(`📍 Location: ${location || "❌ NOT FOUND"}`);
   console.log(`🖼️  Images: ${images.length} found`);

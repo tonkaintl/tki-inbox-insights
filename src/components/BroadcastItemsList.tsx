@@ -28,6 +28,7 @@ interface BroadcastItem {
   stock_number: string | null;
   machine_info: string[];
   machine_url: string | null;
+  youtube_url: string | null;
   price: string | null;
   location: string | null;
   images: string[];
@@ -393,35 +394,150 @@ const BroadcastItemsList = forwardRef<BroadcastItemsListRef>((props, ref) => {
                       <Typography level="body-sm" fontWeight="bold">
                         Price:
                       </Typography>
-                      <Typography level="body-sm">
-                        {item.price || "Not found"}
-                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                        }}
+                      >
+                        <Typography level="body-sm">
+                          {item.price || "Not found"}
+                        </Typography>
+                        {item.price && (
+                          <IconButton
+                            size="sm"
+                            variant="plain"
+                            onClick={() =>
+                              copyToClipboard(
+                                item.price!,
+                                `${item._id}-price`,
+                                "text"
+                              )
+                            }
+                            sx={{ minWidth: 24, minHeight: 24 }}
+                          >
+                            {copiedText === `${item._id}-price` ? "✓" : "📋"}
+                          </IconButton>
+                        )}
+                      </Box>
 
                       <Typography level="body-sm" fontWeight="bold">
                         Location:
                       </Typography>
-                      <Typography level="body-sm">
-                        {item.location || "Not found"}
-                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                        }}
+                      >
+                        <Typography level="body-sm">
+                          {item.location || "Not found"}
+                        </Typography>
+                        {item.location && (
+                          <IconButton
+                            size="sm"
+                            variant="plain"
+                            onClick={() =>
+                              copyToClipboard(
+                                item.location!,
+                                `${item._id}-location`,
+                                "text"
+                              )
+                            }
+                            sx={{ minWidth: 24, minHeight: 24 }}
+                          >
+                            {copiedText === `${item._id}-location` ? "✓" : "📋"}
+                          </IconButton>
+                        )}
+                      </Box>
 
                       {item.machine_url && (
                         <>
                           <Typography level="body-sm" fontWeight="bold">
                             Listing:
                           </Typography>
-                          <Typography level="body-sm">
-                            <a
-                              href={item.machine_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{
-                                color: "inherit",
-                                textDecoration: "underline",
-                              }}
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <Typography level="body-sm">
+                              <a
+                                href={item.machine_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  color: "inherit",
+                                  textDecoration: "underline",
+                                }}
+                              >
+                                {item.machine_url}
+                              </a>
+                            </Typography>
+                            <IconButton
+                              size="sm"
+                              variant="plain"
+                              onClick={() =>
+                                copyToClipboard(
+                                  item.machine_url!,
+                                  `${item._id}-listing`,
+                                  "text"
+                                )
+                              }
+                              sx={{ minWidth: 24, minHeight: 24 }}
                             >
-                              View on tonkaintl.com
-                            </a>
+                              {copiedText === `${item._id}-listing`
+                                ? "✓"
+                                : "📋"}
+                            </IconButton>
+                          </Box>
+                        </>
+                      )}
+
+                      {item.youtube_url && (
+                        <>
+                          <Typography level="body-sm" fontWeight="bold">
+                            Video:
                           </Typography>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <Typography level="body-sm">
+                              <a
+                                href={item.youtube_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  color: "inherit",
+                                  textDecoration: "underline",
+                                }}
+                              >
+                                {item.youtube_url}
+                              </a>
+                            </Typography>
+                            <IconButton
+                              size="sm"
+                              variant="plain"
+                              onClick={() =>
+                                copyToClipboard(
+                                  item.youtube_url!,
+                                  `${item._id}-video`,
+                                  "text"
+                                )
+                              }
+                              sx={{ minWidth: 24, minHeight: 24 }}
+                            >
+                              {copiedText === `${item._id}-video` ? "✓" : "📋"}
+                            </IconButton>
+                          </Box>
                         </>
                       )}
 
